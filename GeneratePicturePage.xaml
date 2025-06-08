@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="AI_Translator_Mobile_App.GeneratePicturePage"
+    BackgroundColor="{StaticResource PageBackgroundColor}"
+    >
+    <ScrollView>
+        <VerticalStackLayout
+            Padding="20"
+            Spacing="15">
+
+            <Label
+                Text="Generate your image with 3 image generator AI models"
+                FontSize="Large"
+                HorizontalOptions="Center" 
+                TextColor="{StaticResource AccentDark}" FontAttributes="Bold"/>
+
+            <!-- User prompt input -->
+            <Entry
+                x:Name="PromptEntry"
+                BackgroundColor="{StaticResource SurfaceColor}"
+                TextColor="{StaticResource PrimaryTextColor}"
+                PlaceholderColor="{StaticResource TertiaryTextColor}"
+                Placeholder="Enter image description" />
+
+            <!-- Generate button -->
+            <Button
+                x:Name="GenerateButton"
+                BackgroundColor="{StaticResource AccentPrimary}"
+                TextColor="{StaticResource PrimaryTextColor}"
+                Text="Generate Images"
+                Clicked="OnGenerateClicked" />
+
+            <!-- Loading indicator -->
+            <ActivityIndicator 
+                x:Name="LoadingIndicator"
+                Color="{StaticResource AccentDark}"
+                IsRunning="False"
+                IsVisible="False"
+                HorizontalOptions="Center" />
+
+            <!-- Results section -->
+
+            <VerticalStackLayout x:Name="GeneratedImagesLayout" IsVisible="True" Spacing="15">
+
+                <!-- OpenAI Image Result -->
+                <Frame BorderColor="{StaticResource GrayLight}" BackgroundColor="{StaticResource FrameBackgroundColor}" Padding="10" HasShadow="False">
+                    <VerticalStackLayout Spacing="10">
+                        <Label Text="OpenAI DALL-E 3" TextColor="{StaticResource PrimaryTextColor}" FontAttributes="Bold" HorizontalOptions="Center"/>
+                        <Image x:Name="OpenAIImage" HeightRequest="300" Aspect="AspectFit"/>
+                        <Label x:Name="OpenAIStatusLabel" TextColor="{StaticResource SecondaryTextColor}" HorizontalOptions="Center"/>
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- Gemini Image Result -->
+                <Frame BorderColor="{StaticResource GrayLight}" BackgroundColor="{StaticResource FrameBackgroundColor}" Padding="10" HasShadow="False">
+                    <VerticalStackLayout Spacing="10">
+                        <Label Text="Google Gemini" TextColor="{StaticResource PrimaryTextColor}" FontAttributes="Bold" HorizontalOptions="Center"/>
+                        <Image x:Name="GeminiImage" HeightRequest="300" Aspect="AspectFit"/>
+                        <Label x:Name="GeminiStatusLabel" TextColor="{StaticResource SecondaryTextColor}" HorizontalOptions="Center"/>
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- Grok Image Result -->
+                <Frame BorderColor="{StaticResource GrayLight}" BackgroundColor="{StaticResource FrameBackgroundColor}" Padding="10" HasShadow="False">
+                    <VerticalStackLayout Spacing="10">
+                        <Label Text="X Grok" TextColor="{StaticResource PrimaryTextColor}" FontAttributes="Bold" HorizontalOptions="Center"/>
+                        <Image x:Name="GrokImage" HeightRequest="300" Aspect="AspectFit"/>
+                        <Label x:Name="GrokStatusLabel" TextColor="{StaticResource SecondaryTextColor}" HorizontalOptions="Center"/>
+                    </VerticalStackLayout>
+                </Frame>
+
+            </VerticalStackLayout>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

@@ -1,0 +1,86 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="AI_Translator_Mobile_App.ChooseModelPage"
+    BackgroundColor="{StaticResource PageBackgroundColor}">
+    <ScrollView BackgroundColor="Transparent">
+        <StackLayout
+            Padding="20"
+            Spacing="15"
+            BackgroundColor="Transparent">
+
+            <Label
+                Text="Custom AI Model Selection"
+                Style="{StaticResource TitleLabel}"
+                HorizontalOptions="Center" />
+
+            <!-- Model Selection Picker -->
+            <StackLayout Orientation="Vertical" Spacing="5">
+                <Picker
+                    x:Name="ModelPicker"
+                    Title="Select AI Model"
+                    SelectedIndexChanged="OnModelSelected">
+                    <Picker.ItemsSource>
+                        <x:Array Type="{x:Type x:String}">
+                            <!-- OpenAI Models -->
+                            <x:String>OpenAI GPT-4.1</x:String>
+                            <x:String>OpenAI GPT-4o</x:String>
+                            <x:String>OpenAI 4-mini</x:String>
+                            <x:String>OpenAI GPT-4o search</x:String>
+                            <x:String>OpenAI GPT-4o mini search</x:String>
+                            <!-- Claude Models -->
+                            <x:String>Claude 3.7 Sonnet</x:String>
+                            <x:String>Claude 3.5 Haiku</x:String>
+                            <!-- Mistral Models -->
+                            <x:String>Mistral Small</x:String>
+                            <x:String>Ministral 3B</x:String>
+                            <x:String>Ministral 8B</x:String>
+                            <!-- Perplexity Models -->
+                            <x:String>Perplexity Sonar Pro</x:String>
+                            <x:String>Perplexity Sonar</x:String>
+                            <!-- Gemini Models -->
+                            <x:String>Google Gemini 2.5 Pro</x:String>
+                            <x:String>Google Gemini 2.5 Flash</x:String>
+                            <!-- DeepSeek Models -->
+                            <x:String>DeepSeek V3</x:String>
+                            <!-- Llama Models -->
+                            <x:String>Meta Llama 4 Maverick</x:String>
+                            <x:String>Meta Llama 4 Scout</x:String>
+                            <!-- Grok Models -->
+                            <x:String>Grok 3</x:String>
+                        </x:Array>
+                    </Picker.ItemsSource>
+                </Picker>
+            </StackLayout>
+
+            <!-- User input -->
+            <Entry
+                x:Name="InputEntry"
+                Placeholder="Enter your message" />
+
+            <!-- Action button -->
+            <Button
+                x:Name="AskButton"
+                Text="Ask"
+                Clicked="OnAskClicked" />
+
+            <!-- Response section -->
+            <Frame BorderColor="{StaticResource GrayLight}" Padding="10" HasShadow="True">
+                <StackLayout Spacing="10">
+                    <Label x:Name="ModelNameLabel" FontAttributes="Bold" HorizontalOptions="Center"/>
+                    <Editor x:Name="OutputEditor" HeightRequest="200" IsReadOnly="True"/>
+                    <Entry x:Name="FollowUpInput" Placeholder="Ask follow-up question..." />
+                    <Button Text="Send Follow-up" Clicked="OnFollowUpClicked" />
+                </StackLayout>
+            </Frame>
+
+            <!-- Loading indicator -->
+            <ActivityIndicator 
+                x:Name="LoadingIndicator"
+                IsRunning="False"
+                IsVisible="False"
+                HorizontalOptions="Center" />
+        </StackLayout>
+    </ScrollView>
+</ContentPage>

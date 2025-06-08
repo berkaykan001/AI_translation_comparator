@@ -1,0 +1,82 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="AI_Translator_Mobile_App.GeneratePicturePage"
+    BackgroundColor="{StaticResource PageBackgroundColor}"
+    Title="Image Generation">
+    <ScrollView>
+        <VerticalStackLayout
+            Padding="20"
+            Spacing="15">
+
+            <Label
+                Text="AI Image Generation"
+                FontSize="Large"
+                TextColor="{StaticResource PrimaryTextColor}"
+                HorizontalOptions="Center" />
+
+            <!-- User prompt input -->
+            <Entry
+                x:Name="PromptEntry"
+                BackgroundColor="{StaticResource SurfaceColor}"
+                TextColor="{StaticResource PrimaryTextColor}"
+                PlaceholderColor="{StaticResource TertiaryTextColor}"
+                Placeholder="Enter image description" />
+
+            <!-- Generate button -->
+            <Button
+                x:Name="GenerateButton"
+                BackgroundColor="{StaticResource PrimaryColor}"
+                TextColor="{StaticResource PrimaryTextColor}"
+                Text="Generate Images"
+                Clicked="OnGenerateClicked" />
+
+            <!-- Loading indicator -->
+            <ActivityIndicator 
+                x:Name="LoadingIndicator"
+                IsRunning="False"
+                IsVisible="False"
+                HorizontalOptions="Center" />
+
+            <!-- Results section -->
+            <Label 
+                Text="Generated Images:"
+                TextColor="{StaticResource PrimaryTextColor}"
+                FontAttributes="Bold" 
+                Margin="0,10,0,5"
+                IsVisible="{Binding Source={x:Reference GeneratedImagesLayout}, Path=IsVisible}"/>
+
+            <VerticalStackLayout x:Name="GeneratedImagesLayout" IsVisible="False" Spacing="15">
+
+                <!-- OpenAI Image Result -->
+                <Frame BorderColor="{StaticResource GrayLight}" BackgroundColor="{StaticResource FrameBackgroundColor}" Padding="10" HasShadow="False">
+                    <VerticalStackLayout Spacing="10">
+                        <Label Text="OpenAI DALL-E 3" TextColor="{StaticResource PrimaryTextColor}" FontAttributes="Bold" HorizontalOptions="Center"/>
+                        <Image x:Name="OpenAIImage" HeightRequest="300" Aspect="AspectFit"/>
+                        <Label x:Name="OpenAIStatusLabel" TextColor="{StaticResource SecondaryTextColor}" HorizontalOptions="Center"/>
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- Gemini Image Result -->
+                <Frame BorderColor="{StaticResource GrayLight}" BackgroundColor="{StaticResource FrameBackgroundColor}" Padding="10" HasShadow="False">
+                    <VerticalStackLayout Spacing="10">
+                        <Label Text="Google Gemini" TextColor="{StaticResource PrimaryTextColor}" FontAttributes="Bold" HorizontalOptions="Center"/>
+                        <Image x:Name="GeminiImage" HeightRequest="300" Aspect="AspectFit"/>
+                        <Label x:Name="GeminiStatusLabel" TextColor="{StaticResource SecondaryTextColor}" HorizontalOptions="Center"/>
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- Grok Image Result -->
+                <Frame BorderColor="{StaticResource GrayLight}" BackgroundColor="{StaticResource FrameBackgroundColor}" Padding="10" HasShadow="False">
+                    <VerticalStackLayout Spacing="10">
+                        <Label Text="X Grok" TextColor="{StaticResource PrimaryTextColor}" FontAttributes="Bold" HorizontalOptions="Center"/>
+                        <Image x:Name="GrokImage" HeightRequest="300" Aspect="AspectFit"/>
+                        <Label x:Name="GrokStatusLabel" TextColor="{StaticResource SecondaryTextColor}" HorizontalOptions="Center"/>
+                    </VerticalStackLayout>
+                </Frame>
+
+            </VerticalStackLayout>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

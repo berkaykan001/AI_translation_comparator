@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>AI_Translator_Mobile_App</name>
+    </assembly>
+    <members>
+        <member name="T:AI_Translator_Mobile_App.Resource">
+            <summary>
+            Android Resource Designer class.
+            Exposes the Android Resource designer assembly into the project Namespace.
+            </summary>
+        </member>
+        <member name="M:TranslationService.TranslateAsync(System.String,System.String,System.String,System.String)">
+            <summary>
+            Translates text using Google Cloud Translate V3, DeepL, or Microsoft Translator
+            </summary>
+            <param name="translatorModel">The translation service to use ("google", "deepl", or "microsoft")</param>
+            <param name="sourceLanguage">Source language code (can be null for auto-detection)</param>
+            <param name="targetLanguage">Target language code</param>
+            <param name="textToTranslate">The text to translate</param>
+            <returns>Translated text</returns>
+        </member>
+    </members>
+</doc>

@@ -1,0 +1,94 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="AI_Translator_Mobile_App.BaseAIComparisonPage"
+    BackgroundColor="{StaticResource PageBackgroundColor}">
+    <ScrollView>
+        <StackLayout
+            Padding="20"
+            Spacing="15">
+
+            <!-- Mode-specific header (to be set by derived classes) -->
+            <Label
+                x:Name="ModeHeaderLabel"
+                x:FieldModifier="protected"
+                Text="AI Model Comparison"
+                FontSize="Large"
+                HorizontalOptions="Center" />
+
+            <!-- User input -->
+            <Entry
+                x:Name="InputEntry"
+                Placeholder="Enter text to process"
+                PlaceholderColor="{StaticResource SecondaryTextColor}" />
+
+            <!-- Action button -->
+            <Button
+                x:Name="ProcessButton"
+                x:FieldModifier="protected"
+                Text="Go"
+                Clicked="OnProcessClicked" />
+
+            <!-- Horizontal scrollable results section -->
+            <Label Text="AI Model Results:" FontAttributes="Bold" Margin="0,10,0,5"/>
+
+            <!-- Horizontal scrolling container for model outputs -->
+            <ScrollView Orientation="Horizontal" HorizontalScrollBarVisibility="Always">
+                <StackLayout Orientation="Horizontal" Spacing="15" Padding="10">
+
+                    <!-- AI Model 1 -->
+                    <StackLayout WidthRequest="300" Spacing="10">
+                        <Label x:Name="Model1Label" x:FieldModifier="protected" Text="Model 1" FontAttributes="Bold" HorizontalOptions="Center"/>
+                        <Frame BorderColor="{StaticResource GrayLight}" BackgroundColor="{StaticResource FrameBackgroundColor}" Padding="10">
+                            <Editor x:Name="OutputModel1" HeightRequest="200" IsReadOnly="True" />
+                        </Frame>
+                        <Entry x:Name="FollowUpInput1" Placeholder="Ask follow-up question..." />
+                        <Button Text="Send" Clicked="OnFollowUpClicked" CommandParameter="1" />
+                    </StackLayout>
+
+                    <!-- AI Model 2 -->
+                    <StackLayout WidthRequest="300" Spacing="10">
+                        <Label x:Name="Model2Label" x:FieldModifier="protected" Text="Model 2" FontAttributes="Bold" HorizontalOptions="Center"/>
+                        <Frame BorderColor="{StaticResource GrayLight}" BackgroundColor="{StaticResource FrameBackgroundColor}" Padding="10">
+                            <Editor x:Name="OutputModel2" HeightRequest="200" IsReadOnly="True" />
+                        </Frame>
+                        <Entry x:Name="FollowUpInput2" Placeholder="Ask follow-up question..." />
+                        <Button Text="Send" Clicked="OnFollowUpClicked" CommandParameter="2" />
+                    </StackLayout>
+
+                    <!-- AI Model 3 -->
+                    <StackLayout WidthRequest="300" Spacing="10">
+                        <Label x:Name="Model3Label" x:FieldModifier="protected" Text="Model 3" FontAttributes="Bold" HorizontalOptions="Center"/>
+                        <Frame BorderColor="{StaticResource GrayLight}" BackgroundColor="{StaticResource FrameBackgroundColor}" Padding="10">
+                            <Editor x:Name="OutputModel3" HeightRequest="200" IsReadOnly="True" />
+                        </Frame>
+                        <Entry x:Name="FollowUpInput3" Placeholder="Ask follow-up question..." />
+                        <Button Text="Send" Clicked="OnFollowUpClicked" CommandParameter="3" />
+                    </StackLayout>
+
+                    <!-- AI Model 4 -->
+                    <StackLayout WidthRequest="300" Spacing="10">
+                        <Label x:Name="Model4Label" x:FieldModifier="protected" Text="Model 4" FontAttributes="Bold" HorizontalOptions="Center"/>
+                        <Frame BorderColor="{StaticResource GrayLight}" BackgroundColor="{StaticResource FrameBackgroundColor}" Padding="10">
+                            <Editor x:Name="OutputModel4" HeightRequest="200" IsReadOnly="True" />
+                        </Frame>
+                        <Entry x:Name="FollowUpInput4" Placeholder="Ask follow-up question..." />
+                        <Button Text="Send" Clicked="OnFollowUpClicked" CommandParameter="4" />
+                    </StackLayout>
+
+                    <!-- AI Model 5 -->
+                    <StackLayout WidthRequest="300" Spacing="10">
+                        <Label x:Name="Model5Label" x:FieldModifier="protected" Text="Model 5" FontAttributes="Bold" HorizontalOptions="Center"/>
+                        <Frame BorderColor="{StaticResource GrayLight}" BackgroundColor="{StaticResource FrameBackgroundColor}" Padding="10">
+                            <Editor x:Name="OutputModel5" HeightRequest="200" IsReadOnly="True" />
+                        </Frame>
+                        <Entry x:Name="FollowUpInput5" Placeholder="Ask follow-up question..." />
+                        <Button Text="Send" Clicked="OnFollowUpClicked" CommandParameter="5" />
+                    </StackLayout>
+
+                </StackLayout>
+            </ScrollView>
+        </StackLayout>
+    </ScrollView>
+</ContentPage>

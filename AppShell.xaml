@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell
+x:Class="AI_Translator_Mobile_App.AppShell"
+xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+xmlns:local="clr-namespace:AI_Translator_Mobile_App"
+Title="AI Model Comparison"
+Shell.BackgroundColor="{StaticResource AccentSubtle}"
+Shell.ForegroundColor="{StaticResource AccentPrimary}"
+Shell.TitleColor="{StaticResource AccentPrimary}"
+Shell.DisabledColor="{StaticResource SecondaryTextColor}"
+Shell.TabBarBackgroundColor="{StaticResource PageBackgroundColor}"
+Shell.TabBarForegroundColor="{StaticResource AccentPrimary}"
+Shell.TabBarTitleColor="{StaticResource AccentPrimary}"
+Shell.TabBarUnselectedColor="{StaticResource TabBarUnselectedColor}">
+
+
+    <TabBar>
+        <Tab Title="Languages" Icon="translate_icon.png">
+            <ShellContent
+ContentTemplate="{DataTemplate local:TranslationPage}"
+Route="TranslationPage" />
+        </Tab>
+        <Tab Title="Quick" Icon="quick_icon.png">
+            <ShellContent
+ContentTemplate="{DataTemplate local:QuickResponsePage}"
+Route="QuickResponsePage" />
+        </Tab>
+        <Tab Title="Smart" Icon="reasoning_icon.png">
+            <ShellContent
+ContentTemplate="{DataTemplate local:ReasoningPage}"
+Route="ReasoningPage" />
+        </Tab>
+        <Tab Title="Internet" Icon="search_icon.png">
+            <ShellContent
+ContentTemplate="{DataTemplate local:InternetSearchPage}"
+Route="InternetSearchPage" />
+        </Tab>
+        <Tab Title="Coding" Icon="code_icon.png">
+            <ShellContent
+ContentTemplate="{DataTemplate local:CodingPage}"
+Route="CodingPage" />
+        </Tab>
+        <Tab Title="Images" Icon="image_icon.png">
+            <ShellContent
+ContentTemplate="{DataTemplate local:GeneratePicturePage}"
+Route="GeneratePicturePage" />
+        </Tab>
+        <Tab Title="Choose" Icon="choose_icon.png">
+            <ShellContent
+ContentTemplate="{DataTemplate local:ChooseModelPage}"
+Route="ChooseModelPage" />
+        </Tab>
+    </TabBar>
+</Shell>
