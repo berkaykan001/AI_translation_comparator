@@ -35,6 +35,8 @@
 {
     // OpenAI
     { "gpt-4.1-2025-04-14", (2m, 8m) },
+    { "o3-2025-04-16", (2m, 8m) },
+    { "o1-2024-12-17", (15m, 60m) },
     { "o4-mini-2025-04-16", (1.1m, 4.4m) },
     { "gpt-4o-2024-08-06", (2.5m, 10m) },
     { "gpt-4o-search-preview", (2.5m, 10m) }, // Bunun hesaplanması çok karışık, BaseChatService.CalculateOpenAIWebSearchCost methodu bunu hesaplıyo.

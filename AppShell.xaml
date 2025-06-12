@@ -31,6 +31,11 @@ Route="QuickResponsePage" />
 ContentTemplate="{DataTemplate local:ReasoningPage}"
 Route="ReasoningPage" />
         </Tab>
+        <Tab Title="Choose" Icon="choose_icon.png">
+            <ShellContent
+ContentTemplate="{DataTemplate local:ChooseModelPage}"
+Route="ChooseModelPage" />
+        </Tab>
         <Tab Title="Internet" Icon="search_icon.png">
             <ShellContent
 ContentTemplate="{DataTemplate local:InternetSearchPage}"
@@ -46,10 +51,6 @@ Route="CodingPage" />
 ContentTemplate="{DataTemplate local:GeneratePicturePage}"
 Route="GeneratePicturePage" />
         </Tab>
-        <Tab Title="Choose" Icon="choose_icon.png">
-            <ShellContent
-ContentTemplate="{DataTemplate local:ChooseModelPage}"
-Route="ChooseModelPage" />
-        </Tab>
+
     </TabBar>
 </Shell>

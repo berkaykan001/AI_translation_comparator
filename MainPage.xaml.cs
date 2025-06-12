@@ -8,7 +8,6 @@ namespace AI_Translator_Mobile_App
         {
             InitializeComponent();
             modelMappings = DefaultModelMappings;
-            
         }
 
         private string system_role_for_AI = "";
@@ -185,13 +184,13 @@ namespace AI_Translator_Mobile_App
         // Grammar check models
         private readonly Dictionary<int, (string LLM, string Model, string Label)> grammarCheckModels = new Dictionary<int, (string LLM, string Model, string Label)>
         {
-            { 1, ("Claude", "claude-sonnet-4-20250514", "Claude 4 Sonnet") },
-            { 2, ("OpenAI", "gpt-4.1-2025-04-14", "OpenAI GPT-4.1") },
-            { 3, ("OpenAI", "o4-mini-2025-04-16", "OpenAI o4-mini") }
+            { 1, ("OpenRouter", "google/gemini-2.5-flash-preview", "Google Gemini 2.5 Flash") },
+            { 2, ("OpenAI", "gpt-4.1-2025-04-14", "OpenAI GPT-4.1") }
         };
         // Translation AI models
         public static readonly Dictionary<int, (string LLM, string Model, string Label)> TranslationAiModels = new Dictionary<int, (string LLM, string Model, string Label)>
         {
+            { 3, ("Claude", "claude-sonnet-4-20250514", "Claude 4 Sonnet") },
             { 4, ("OpenAI", "gpt-4o-2024-08-06", "OpenAI GPT-4o") },
             { 5, ("OpenRouter", "meta-llama/llama-4-maverick", "Meta Llama 4 Maverick") }
         };
@@ -223,20 +222,22 @@ namespace AI_Translator_Mobile_App
                 // In translation mode, first 3 are translation services
                 Model1Label.Text = "DeepL";
                 Model2Label.Text = "Google Translate";
-                Model3Label.Text = "Microsoft Translator";
 
                 // Show AI model names for slots 4-5
+                Model3Label.Text = aiModelMappings[3].Label;
                 Model4Label.Text = aiModelMappings[4].Label;
                 Model5Label.Text = aiModelMappings[5].Label;
+                InputEntry.Placeholder = "Text to translate";
             }
             else
             {
                 // In grammar check mode, all 5 are AI models
                 Model1Label.Text = grammarCheckModels[1].Label;
                 Model2Label.Text = grammarCheckModels[2].Label;
-                Model3Label.Text = grammarCheckModels[3].Label;
+                Model3Label.Text = aiModelMappings[3].Label;
                 Model4Label.Text = aiModelMappings[4].Label;
                 Model5Label.Text = aiModelMappings[5].Label;
+                InputEntry.Placeholder = "Text to check grammar";
             }
 
             // Show/hide follow-ups for translation services based on mode
@@ -247,6 +248,7 @@ namespace AI_Translator_Mobile_App
             FollowUp4Container.IsVisible = isGrammarCheck;
             FollowUp5Container.IsVisible = isGrammarCheck;
             TargetLanguagePicker.IsVisible = !isGrammarCheck;
+
         }
 
         private void UpdateButtonText()
@@ -321,7 +323,6 @@ namespace AI_Translator_Mobile_App
             // Add translation service tasks
             tasks.Add(CreateTranslationTask("DeepL", selectedLanguage, inputText, 0, OutputModel1));
             tasks.Add(CreateTranslationTask("Google", selectedLanguage, inputText, 1, OutputModel2));
-            tasks.Add(CreateTranslationTask("Microsoft", selectedLanguage, inputText, 2, OutputModel3));
         }
 
         private Task CreateTranslationTask(string service, string language, string text, int resultIndex, Editor outputEditor)
@@ -337,7 +338,7 @@ namespace AI_Translator_Mobile_App
         // Helper method to handle grammar check
         private async Task ProcessGrammarCheck(string inputText, string systemRole, List<Task> tasks)
         {
-            for (int i = 0; i < 3; i++)
+            for (int i = 0; i < 2; i++)
             {
                 var (llm, model, Label) = grammarCheckModels[i + 1];
                 int modelIndex = i;
@@ -350,7 +351,6 @@ namespace AI_Translator_Mobile_App
                         {
                             case 0: OutputModel1.Text = AI_answers[0]; break;
                             case 1: OutputModel2.Text = AI_answers[1]; break;
-                            case 2: OutputModel3.Text = AI_answers[2]; break;
                         }
                     });
                 }));
@@ -360,7 +360,13 @@ namespace AI_Translator_Mobile_App
         // Helper method to handle AI models
         private async Task ProcessAIModels(string inputText, string systemRole, List<Task> tasks)
         {
-            // Add slot 4 and 5 AI models
+            // Add slot 3, 4 and 5 AI models
+            tasks.Add(Task.Run(async () => {
+                AI_answers[2] = await All_AI_Chat_Bots.AskAI(
+                    aiModelMappings[3].LLM, aiModelMappings[3].Model, systemRole, inputText);
+                MainThread.BeginInvokeOnMainThread(() => OutputModel3.Text = AI_answers[2]);
+            }));
+
             tasks.Add(Task.Run(async () => {
                 AI_answers[3] = await All_AI_Chat_Bots.AskAI(
                     aiModelMappings[4].LLM, aiModelMappings[4].Model, systemRole, inputText);
@@ -387,7 +393,7 @@ namespace AI_Translator_Mobile_App
             }
 
             // Translation services don't support follow-ups in translation mode
-            if (isTranslationMode && modelNumber <= 3)
+            if (isTranslationMode && modelNumber <= 2)
             {
                 await DisplayAlert("Error", "Translation services don't support follow-up questions", "OK");
                 return;
@@ -446,7 +452,6 @@ namespace AI_Translator_Mobile_App
     {
         public QuickResponsePage() : base()
         {
-            ModeHeaderLabel.Text = "Get your answer from the fastest AI models";
             ProcessButton.Text = "Get Quick Responses";
         }
 
@@ -472,7 +477,6 @@ namespace AI_Translator_Mobile_App
     {
         public ReasoningPage() : base()
         {
-            ModeHeaderLabel.Text = "Get your answer from the smartest AI models";
             ProcessButton.Text = "Ask";
         }
 
@@ -481,7 +485,7 @@ namespace AI_Translator_Mobile_App
             modelMappings = new Dictionary<int, (string LLM, string Model, string Label)>
             {
                 { 1, ("OpenAI", "gpt-4.1-2025-04-14", "OpenAI GPT-4.1") },
-                { 2, ("OpenAI", "o4-mini-2025-04-16", "OpenAI o4-mini") },
+                { 2, ("OpenAI", "gpt-4o-2024-08-06", "OpenAI GPT-4o") },
                 { 3, ("Claude", "claude-sonnet-4-20250514", "Claude 4 Sonnet") },
                 { 4, ("OpenRouter", "google/gemini-2.5-pro-preview", "Google Gemini 2.5 Pro") },
                 { 5, ("Perplexity", "sonar-pro", "Perplexity Sonar Pro") }
@@ -491,7 +495,7 @@ namespace AI_Translator_Mobile_App
 
         protected override string GetSystemRolePrompt()
         {
-            return "Don't rush your answer. Make sure that you're giving the correct and accurate answer.";
+            return "Provide short and brief answers, do not include unnecessary or extra information. But make sure your answer is accurate and correct.";
         }
     }
 
@@ -499,7 +503,6 @@ namespace AI_Translator_Mobile_App
     {
         public InternetSearchPage() : base()
         {
-            ModeHeaderLabel.Text = "Get your answer from web-searching AI models";
             ProcessButton.Text = "Get answers";
         }
 
@@ -525,7 +528,6 @@ namespace AI_Translator_Mobile_App
     {
         public CodingPage() : base()
         {
-            ModeHeaderLabel.Text = "Get your answer from the best coder AI models";
             ProcessButton.Text = "Generate Code";
         }
 
@@ -743,10 +745,10 @@ namespace AI_Translator_Mobile_App
             { "Google Gemini 2.5 Pro", ("OpenRouter", "google/gemini-2.5-pro-preview", "Google Gemini 2.5 Pro") },
             { "Google Gemini 2.5 Flash", ("OpenRouter", "google/gemini-2.5-flash-preview", "Google Gemini 2.5 Flash") },
             { "DeepSeek V3", ("DeepSeek", "deepseek-chat", "DeepSeek V3") },
-            { "Grok 3", ("Grok", "grok-3-latest", "Grok 3") },
-            { "Grok 3 Search", ("GrokWeb", "grok-3-latest", "Grok 3 Search") },
             { "Meta Llama 4 Maverick", ("LLMapi", "llama4-maverick", "Meta Llama 4 Maverick") },
-            { "Meta Llama 4 Scout", ("LLMapi", "llama4-scout", "Meta Llama 4 Scout") }
+            { "Meta Llama 4 Scout", ("LLMapi", "llama4-scout", "Meta Llama 4 Scout") },
+            { "Grok 3", ("Grok", "grok-3-latest", "Grok 3") },
+            { "Grok 3 Search", ("GrokWeb", "grok-3-latest", "Grok 3 Search") }
         };
 
         public ChooseModelPage()
@@ -754,7 +756,7 @@ namespace AI_Translator_Mobile_App
             InitializeComponent();
 
             // Set default selection
-            ModelPicker.SelectedIndex = 0;
+            ModelPicker.SelectedIndex = 16;
             UpdateSelectedModel();
         }
 

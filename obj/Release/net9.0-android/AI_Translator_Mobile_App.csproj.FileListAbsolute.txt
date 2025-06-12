@@ -482,3 +482,4 @@ C:\Users\Master_BME\source\repos\AI_Translator_Mobile_App\obj\Release\net9.0-and
 C:\Users\Master_BME\source\repos\AI_Translator_Mobile_App\obj\Release\net9.0-android\lp\162\jl\files.cache
 C:\Users\Master_BME\source\repos\AI_Translator_Mobile_App\obj\Release\net9.0-android\resizetizer\f\MaterialIcons-Regular.ttf
 C:\Users\Master_BME\source\repos\AI_Translator_Mobile_App\obj\Release\net9.0-android\assets\MaterialIcons-Regular.ttf
+C:\Users\Master_BME\source\repos\AI_Translator_Mobile_App\obj\Release\net9.0-android\AI_Translator_Mobile_App.sourcelink.json

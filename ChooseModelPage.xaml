@@ -10,12 +10,6 @@
             Spacing="15"
             BackgroundColor="Transparent">
 
-            <Label
-                Text="Choose your AI model"
-                Style="{StaticResource TitleLabel}"
-                HorizontalOptions="Center" 
-                TextColor="{StaticResource AccentDark}" FontAttributes="Bold"/>
-
             <!-- Model Selection Picker -->
             <StackLayout Orientation="Vertical" Spacing="5">
                 <Picker
@@ -84,7 +78,7 @@
             <Frame BorderColor="{StaticResource GrayLight}" Padding="10" HasShadow="True">
                 <StackLayout Spacing="10">
                     <Label x:Name="ModelNameLabel" FontAttributes="Bold" HorizontalOptions="Center"/>
-                    <Editor x:Name="OutputEditor" HeightRequest="200" IsReadOnly="True"/>
+                    <Editor x:Name="OutputEditor" HeightRequest="{OnPlatform Default=330, Android=600, iOS=600}" IsReadOnly="True" />
                     <Entry x:Name="FollowUpInput" Placeholder="Ask follow-up question..." />
                     <Button Text="Send Follow-up" Clicked="OnFollowUpClicked" />
                 </StackLayout>

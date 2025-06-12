@@ -10,12 +10,6 @@
             Padding="20"
             Spacing="15">
 
-            <Label
-                Text="Generate your image with 3 image generator AI models"
-                FontSize="Large"
-                HorizontalOptions="Center" 
-                TextColor="{StaticResource AccentDark}" FontAttributes="Bold"/>
-
             <!-- User prompt input -->
             <Entry
                 x:Name="PromptEntry"

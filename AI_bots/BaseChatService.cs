@@ -62,9 +62,24 @@
     // Clear all conversation histories
     public static void ClearAllConversationHistories()
     {
-        foreach (var modelId in _conversationHistories.Keys.ToList())
+        try
         {
-            _conversationHistories[modelId].Clear();
+            foreach (var modelId in _conversationHistories.Keys.ToList())
+            {
+                try
+                {
+                    _conversationHistories[modelId].Clear();
+                }
+                catch
+                {
+                    // Ignore any errors and continue without clearing
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            // Optionally log or handle the exception as needed
+            System.Diagnostics.Debug.WriteLine($"Error clearing conversation histories: {ex.Message}");
         }
     }
 

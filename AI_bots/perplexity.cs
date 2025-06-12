@@ -5,7 +5,7 @@ using System.Text.Json;
 public class PerplexityChat : BaseChatService
 {
     public static async Task<(string text, long elapsedMs, decimal estimatedCost)> AskPerplexity(
-        string AImodel, string systemRole, string userMessage)
+    string AImodel, string systemRole, string userMessage)
     {
         // Ensure this model has a conversation history
         EnsureConversationExists(AImodel);
@@ -17,21 +17,18 @@ public class PerplexityChat : BaseChatService
         // Build messages array for the API request
         var messages = new List<object>();
 
-        // Add system message if provided or if exists in system messages
-        if (_systemMessages.ContainsKey(AImodel))
-        {
-            messages.Add(_systemMessages[AImodel]);
-        }
-        else if (!string.IsNullOrEmpty(systemRole))
-        {
-            messages.Add(new { role = "system", content = systemRole });
-        }
-
         // Add conversation history
         messages.AddRange(_conversationHistories[AImodel]);
 
-        // Add current user message
-        var userMsg = new { role = "user", content = userMessage };
+        // Embed system role instructions into user message if provided
+        string finalUserMessage = userMessage;
+        if (!string.IsNullOrEmpty(systemRole))
+        {
+            finalUserMessage = $"(Instruction: {systemRole}) {userMessage}";
+        }
+
+        // Add current user message with embedded system instructions
+        var userMsg = new { role = "user", content = finalUserMessage };
         messages.Add(userMsg);
 
         var requestBody = new
@@ -44,7 +41,7 @@ public class PerplexityChat : BaseChatService
         var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
 
         // Estimate input tokens
-        int inputTokens = EstimateTokenCount(systemRole) + EstimateTokenCount(userMessage);
+        int inputTokens = EstimateTokenCount(finalUserMessage);
         foreach (dynamic msg in _conversationHistories[AImodel])
         {
             inputTokens += EstimateTokenCount(msg.content.ToString());
@@ -88,6 +85,7 @@ public class PerplexityChat : BaseChatService
 
         return (responseText, stopwatch.ElapsedMilliseconds, estimatedCost);
     }
+
 
     public static async Task<(string text, long elapsedMs, decimal estimatedCost)> AskPerplexityFollowUp(
         string AImodel, string systemRole, string followUpQuestion)
