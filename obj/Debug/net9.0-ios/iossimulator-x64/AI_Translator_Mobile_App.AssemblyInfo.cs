@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("AI_Translator_Mobile_App")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0+87163c8316779c93fd7f8e6fffbb46cae8283345")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0+4bf4a6f660e8f0ae1b6afe73b25a29781b669b8a")]
 [assembly: System.Reflection.AssemblyProductAttribute("AI_Translator_Mobile_App")]
 [assembly: System.Reflection.AssemblyTitleAttribute("AI_Translator_Mobile_App")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

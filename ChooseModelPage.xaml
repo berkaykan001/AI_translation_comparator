@@ -20,7 +20,7 @@
                             <!-- OpenAI Models -->
                             <x:String>OpenAI GPT-4.1</x:String>
                             <x:String>OpenAI GPT-4o</x:String>
-                            <x:String>OpenAI 4-mini</x:String>
+                            <x:String>OpenAI o4-mini</x:String>
                             <x:String>OpenAI GPT-4o search</x:String>
                             <x:String>OpenAI GPT-4o mini search</x:String>
                             <!-- Claude Models -->

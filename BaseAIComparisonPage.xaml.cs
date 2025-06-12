@@ -40,18 +40,6 @@ namespace AI_Translator_Mobile_App
                 Model5Label.Text = modelMappings[5].Label;
         }
 
-        // Helper to shorten model names for display
-        private string GetShortModelName(string fullModelName)
-        {
-            // Extract just the model name without version numbers when possible
-            if (fullModelName.Contains("-"))
-            {
-                var parts = fullModelName.Split('-');
-                return parts[0];
-            }
-            return fullModelName;
-        }
-
         // Abstract method to set the system role prompt
         protected abstract string GetSystemRolePrompt();
 
@@ -118,7 +106,6 @@ namespace AI_Translator_Mobile_App
                 ProcessButton.IsEnabled = true;
             }
         }
-
 
         protected async void OnFollowUpClicked(object sender, EventArgs e)
         {
