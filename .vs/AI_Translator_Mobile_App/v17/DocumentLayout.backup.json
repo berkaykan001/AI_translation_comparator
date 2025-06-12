@@ -3,24 +3,16 @@
   "WorkspaceRootPath": "C:\\Users\\Master_BME\\source\\repos\\AI_Translator_Mobile_App\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{3190E6FF-1D3E-420C-9114-DE969AAC6721}|AI_Translator_Mobile_App.csproj|c:\\users\\master_bme\\source\\repos\\ai_translator_mobile_app\\baseaicomparisonpage.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{3190E6FF-1D3E-420C-9114-DE969AAC6721}|AI_Translator_Mobile_App.csproj|solutionrelative:baseaicomparisonpage.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{3190E6FF-1D3E-420C-9114-DE969AAC6721}|AI_Translator_Mobile_App.csproj|c:\\users\\master_bme\\source\\repos\\ai_translator_mobile_app\\mainpage.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{3190E6FF-1D3E-420C-9114-DE969AAC6721}|AI_Translator_Mobile_App.csproj|solutionrelative:mainpage.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{3190E6FF-1D3E-420C-9114-DE969AAC6721}|AI_Translator_Mobile_App.csproj|c:\\users\\master_bme\\source\\repos\\ai_translator_mobile_app\\translationpage.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{3190E6FF-1D3E-420C-9114-DE969AAC6721}|AI_Translator_Mobile_App.csproj|solutionrelative:translationpage.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{3190E6FF-1D3E-420C-9114-DE969AAC6721}|AI_Translator_Mobile_App.csproj|c:\\users\\master_bme\\source\\repos\\ai_translator_mobile_app\\baseaicomparisonpage.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
       "RelativeMoniker": "D:0:0:{3190E6FF-1D3E-420C-9114-DE969AAC6721}|AI_Translator_Mobile_App.csproj|solutionrelative:baseaicomparisonpage.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{3190E6FF-1D3E-420C-9114-DE969AAC6721}|AI_Translator_Mobile_App.csproj|c:\\users\\master_bme\\source\\repos\\ai_translator_mobile_app\\translationpage.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
-      "RelativeMoniker": "D:0:0:{3190E6FF-1D3E-420C-9114-DE969AAC6721}|AI_Translator_Mobile_App.csproj|solutionrelative:translationpage.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{3190E6FF-1D3E-420C-9114-DE969AAC6721}|AI_Translator_Mobile_App.csproj|c:\\users\\master_bme\\source\\repos\\ai_translator_mobile_app\\choosemodelpage.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
-      "RelativeMoniker": "D:0:0:{3190E6FF-1D3E-420C-9114-DE969AAC6721}|AI_Translator_Mobile_App.csproj|solutionrelative:choosemodelpage.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+      "AbsoluteMoniker": "D:0:0:{3190E6FF-1D3E-420C-9114-DE969AAC6721}|AI_Translator_Mobile_App.csproj|c:\\users\\master_bme\\source\\repos\\ai_translator_mobile_app\\mainpage.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3190E6FF-1D3E-420C-9114-DE969AAC6721}|AI_Translator_Mobile_App.csproj|solutionrelative:mainpage.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -46,65 +38,39 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "ChooseModelPage.xaml",
-              "DocumentMoniker": "C:\\Users\\Master_BME\\source\\repos\\AI_Translator_Mobile_App\\ChooseModelPage.xaml",
-              "RelativeDocumentMoniker": "ChooseModelPage.xaml",
-              "ToolTip": "C:\\Users\\Master_BME\\source\\repos\\AI_Translator_Mobile_App\\ChooseModelPage.xaml*",
-              "RelativeToolTip": "ChooseModelPage.xaml*",
-              "ViewState": "AgIAAAkAAAAAAAAAAADwvxYAAAAuAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2025-06-11T14:14:53.591Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 1,
               "Title": "BaseAIComparisonPage.xaml",
               "DocumentMoniker": "C:\\Users\\Master_BME\\source\\repos\\AI_Translator_Mobile_App\\BaseAIComparisonPage.xaml",
               "RelativeDocumentMoniker": "BaseAIComparisonPage.xaml",
-              "ToolTip": "C:\\Users\\Master_BME\\source\\repos\\AI_Translator_Mobile_App\\BaseAIComparisonPage.xaml",
-              "RelativeToolTip": "BaseAIComparisonPage.xaml",
-              "ViewState": "AgIAABcAAAAAAAAAAAAMwDIAAABuAAAAAAAAAA==",
+              "ToolTip": "C:\\Users\\Master_BME\\source\\repos\\AI_Translator_Mobile_App\\BaseAIComparisonPage.xaml*",
+              "RelativeToolTip": "BaseAIComparisonPage.xaml*",
+              "ViewState": "AgIAAAIAAAAAAAAAAAAMwFAAAABfAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
               "WhenOpened": "2025-06-11T14:07:53.321Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "BaseAIComparisonPage.xaml.cs",
-              "DocumentMoniker": "C:\\Users\\Master_BME\\source\\repos\\AI_Translator_Mobile_App\\BaseAIComparisonPage.xaml.cs",
-              "RelativeDocumentMoniker": "BaseAIComparisonPage.xaml.cs",
-              "ToolTip": "C:\\Users\\Master_BME\\source\\repos\\AI_Translator_Mobile_App\\BaseAIComparisonPage.xaml.cs*",
-              "RelativeToolTip": "BaseAIComparisonPage.xaml.cs*",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABYAAABDAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-11T13:26:25.017Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 2,
               "Title": "MainPage.xaml.cs",
               "DocumentMoniker": "C:\\Users\\Master_BME\\source\\repos\\AI_Translator_Mobile_App\\MainPage.xaml.cs",
               "RelativeDocumentMoniker": "MainPage.xaml.cs",
               "ToolTip": "C:\\Users\\Master_BME\\source\\repos\\AI_Translator_Mobile_App\\MainPage.xaml.cs",
               "RelativeToolTip": "MainPage.xaml.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAAiAAAAAAAAAA==",
+              "ViewState": "AgIAAIwAAAAAAAAAAAAuwGYAAAA2AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-05-20T15:55:30.011Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 0,
               "Title": "TranslationPage.xaml",
               "DocumentMoniker": "C:\\Users\\Master_BME\\source\\repos\\AI_Translator_Mobile_App\\TranslationPage.xaml",
               "RelativeDocumentMoniker": "TranslationPage.xaml",
-              "ToolTip": "C:\\Users\\Master_BME\\source\\repos\\AI_Translator_Mobile_App\\TranslationPage.xaml",
-              "RelativeToolTip": "TranslationPage.xaml",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABsAAAAtAAAAAAAAAA==",
+              "ToolTip": "C:\\Users\\Master_BME\\source\\repos\\AI_Translator_Mobile_App\\TranslationPage.xaml*",
+              "RelativeToolTip": "TranslationPage.xaml*",
+              "ViewState": "AgIAACcAAAAAAAAAAAAAADsAAAAzAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
               "WhenOpened": "2025-05-20T11:06:18.122Z",
               "EditorCaption": ""
