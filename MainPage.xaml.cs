@@ -10,11 +10,18 @@ namespace AI_Translator_Mobile_App
         }
     }
 
+    public enum PageMode
+    {
+        Translation,
+        GrammarCheck,
+        UsageAnalysis
+    }
+
     public partial class TranslationPage : ContentPage
     {
         private string system_role_for_AI = "";
         private string[] AI_answers = new string[5];
-        private bool isTranslationMode = true;
+        private PageMode currentMode = PageMode.Translation;
 
         // Grammar check models
         private readonly Dictionary<int, (string LLM, string Model, string Label)> grammarCheckModels = new Dictionary<int, (string LLM, string Model, string Label)>
@@ -60,56 +67,75 @@ namespace AI_Translator_Mobile_App
 
         void OnActionChanged(object sender, CheckedChangedEventArgs e)
         {
-            // If grammar check is chosen, we don't need a target language
-            isTranslationMode = !GrammarCheckRadioButton.IsChecked;
+            // Determine current mode based on which radio button is checked
+            if (TranslateRadioButton.IsChecked)
+                currentMode = PageMode.Translation;
+            else if (GrammarCheckRadioButton.IsChecked)
+                currentMode = PageMode.GrammarCheck;
+            else if (UsageAnalysisRadioButton.IsChecked)
+                currentMode = PageMode.UsageAnalysis;
 
             UpdateButtonText();
 
             // Update service and model labels based on mode
-            if (isTranslationMode)
+            switch (currentMode)
             {
-                // In translation mode, first 3 are translation services
-                Model1Label.Text = "DeepL";
-                Model2Label.Text = "Google Translate";
+                case PageMode.Translation:
+                    // In translation mode, first 2 are translation services, last 3 are AI models
+                    Model1Label.Text = "DeepL";
+                    Model2Label.Text = "Google Translate";
+                    Model3Label.Text = aiModelMappings[3].Label;
+                    Model4Label.Text = aiModelMappings[4].Label;
+                    Model5Label.Text = aiModelMappings[5].Label;
+                    InputEntry.Placeholder = "Text to translate";
+                    break;
 
-                // Show AI model names for slots 3-5
-                Model3Label.Text = aiModelMappings[3].Label;
-                Model4Label.Text = aiModelMappings[4].Label;
-                Model5Label.Text = aiModelMappings[5].Label;
-                InputEntry.Placeholder = "Text to translate";
+                case PageMode.GrammarCheck:
+                    // In grammar check mode, all 5 are AI models
+                    Model1Label.Text = grammarCheckModels[1].Label;
+                    Model2Label.Text = grammarCheckModels[2].Label;
+                    Model3Label.Text = aiModelMappings[3].Label;
+                    Model4Label.Text = aiModelMappings[4].Label;
+                    Model5Label.Text = aiModelMappings[5].Label;
+                    InputEntry.Placeholder = "Text to check grammar";
+                    break;
+
+                case PageMode.UsageAnalysis:
+                    // In usage analysis mode, all 5 are AI models (same as grammar check)
+                    Model1Label.Text = grammarCheckModels[1].Label;
+                    Model2Label.Text = grammarCheckModels[2].Label;
+                    Model3Label.Text = aiModelMappings[3].Label;
+                    Model4Label.Text = aiModelMappings[4].Label;
+                    Model5Label.Text = aiModelMappings[5].Label;
+                    InputEntry.Placeholder = "Text to analyze usage";
+                    break;
             }
-            else
-            {
-                // In grammar check mode, all 5 are AI models
-                Model1Label.Text = grammarCheckModels[1].Label;
-                Model2Label.Text = grammarCheckModels[2].Label;
-                Model3Label.Text = aiModelMappings[3].Label;
-                Model4Label.Text = aiModelMappings[4].Label;
-                Model5Label.Text = aiModelMappings[5].Label;
-                InputEntry.Placeholder = "Text to check grammar";
 
-            }
+            // Show/hide follow-ups and language selection based on mode
+            bool showFollowUps = currentMode != PageMode.Translation;
+            bool showLanguageSelection = currentMode == PageMode.Translation;
 
-            // Show/hide follow-ups for translation services based on mode
-            bool isGrammarCheck = !isTranslationMode;
-            FollowUp1Container.IsVisible = isGrammarCheck;
-            FollowUp2Container.IsVisible = isGrammarCheck;
-            FollowUp3Container.IsVisible = isGrammarCheck;
-            FollowUp4Container.IsVisible = isGrammarCheck;
-            FollowUp5Container.IsVisible = isGrammarCheck;
-            EnglishRadio.IsVisible = !isGrammarCheck;
-            FrenchRadio.IsVisible = !isGrammarCheck;
-            TurkishRadio.IsVisible = !isGrammarCheck;
-            LanguageLabel.IsVisible = !isGrammarCheck;
-
-            // Show/hide language selection based on mode
-            // Assuming you have a container for the language radio buttons
-            // LanguageSelectionContainer.IsVisible = isTranslationMode;
+            FollowUp1Container.IsVisible = showFollowUps;
+            FollowUp2Container.IsVisible = showFollowUps;
+            FollowUp3Container.IsVisible = showFollowUps;
+            FollowUp4Container.IsVisible = showFollowUps;
+            FollowUp5Container.IsVisible = showFollowUps;
+            
+            EnglishRadio.IsVisible = showLanguageSelection;
+            FrenchRadio.IsVisible = showLanguageSelection;
+            TurkishRadio.IsVisible = showLanguageSelection;
+            LanguageLabel.IsVisible = showLanguageSelection;
         }
 
         private void UpdateButtonText()
         {
-            ProcessButton.Text = isTranslationMode ? "Translate" : "Check Grammar";
+            ProcessButton.Text = currentMode switch
+            {
+                PageMode.Translation => "Translate",
+                PageMode.GrammarCheck => "Check Grammar",
+                PageMode.UsageAnalysis => "Analyze Usage",
+                _ => "Process"
+            };
         }
 
         private async void OnProcessClicked(object sender, EventArgs e)
@@ -129,29 +155,34 @@ namespace AI_Translator_Mobile_App
             try
             {
                 // System role selection
-                switch (isTranslationMode)
+                switch (currentMode)
                 {
-                    case false:
+                    case PageMode.Translation:
+                        system_role_for_AI = $"Translate the given message to {GetSelectedLanguage()}. Do not add any other comments. Only translate. If there is more than one translation, include them all.";
+                        break;
+                    case PageMode.GrammarCheck:
                         system_role_for_AI = "You'll be given a sentence or a phrase. Your ONLY task is to check if the grammar of the given message is correct or not. If it's not correct, explain why. " +
                         "Given sentence/phrase might be a question, don't get confused and don't try to answer the question. ONLY check the grammar of the sentence. Make your explanation only in English";
                         break;
-                    case true:
-                        system_role_for_AI = $"Translate the given message to {GetSelectedLanguage()}. Do not add any other comments. Only translate. If there is more than one translation, include them all.";
+                    case PageMode.UsageAnalysis:
+                        system_role_for_AI = "Analyze the given phrase/word for its usage context. Be very brief (1-2 sentences): formality level, frequency of use, and typical situations. Keep it short and practical.";
                         break;
                 }
 
                 var tasks = new List<Task>();
 
-                if (isTranslationMode)
+                switch (currentMode)
                 {
-                    await ProcessTranslationServices(InputEntry.Text, tasks);
-                }
-                else
-                {
-                    await ProcessGrammarCheck(InputEntry.Text, system_role_for_AI, tasks);
+                    case PageMode.Translation:
+                        await ProcessTranslationServices(InputEntry.Text, tasks);
+                        break;
+                    case PageMode.GrammarCheck:
+                    case PageMode.UsageAnalysis:
+                        await ProcessGrammarCheck(InputEntry.Text, system_role_for_AI, tasks);
+                        break;
                 }
 
-                // Tasks 3-5: AI models (for both translation and grammar check)
+                // Tasks 3-5: AI models (for all modes)
                 await ProcessAIModels(InputEntry.Text, system_role_for_AI, tasks);
 
                 // Wait for all tasks to complete

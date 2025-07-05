@@ -8,7 +8,7 @@
         <StackLayout>
 
             <!-- Action selector -->
-            <StackLayout Orientation="Horizontal" Spacing="20" VerticalOptions="Center" Margin="20,10,20,0">
+            <StackLayout Orientation="Horizontal" Spacing="15" VerticalOptions="Center" Margin="20,10,20,0">
                 <Label Text="Mode:" VerticalOptions="Center" TextColor="{StaticResource AccentLight}"/>
                 <RadioButton
                     x:Name="TranslateRadioButton"
@@ -19,6 +19,11 @@
                 <RadioButton
                     x:Name="GrammarCheckRadioButton"
                     Content="Grammar Check"
+                    GroupName="ActionGroup"
+                    CheckedChanged="OnActionChanged" />
+                <RadioButton
+                    x:Name="UsageAnalysisRadioButton"
+                    Content="Usage Analysis"
                     GroupName="ActionGroup"
                     CheckedChanged="OnActionChanged" />
             </StackLayout>
