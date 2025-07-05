@@ -6,15 +6,22 @@
     // Dictionary to store system messages for different model IDs
     protected static Dictionary<string, object> _systemMessages = new();
 
+    // Thread-safe locks for dictionary operations
+    protected static readonly object _conversationLock = new object();
+    protected static readonly object _systemMessageLock = new object();
+
     // Default memory size
     protected static int _memorySize = 10;
 
     // Method to initialize conversation for a model if it doesn't exist
     protected static void EnsureConversationExists(string modelId)
     {
-        if (!_conversationHistories.ContainsKey(modelId))
+        lock (_conversationLock)
         {
-            _conversationHistories[modelId] = new List<object>();
+            if (!_conversationHistories.ContainsKey(modelId))
+            {
+                _conversationHistories[modelId] = new List<object>();
+            }
         }
     }
 
@@ -22,7 +29,10 @@
     public static void AddPermanentSystemMessage(string modelId, string message)
     {
         EnsureConversationExists(modelId);
-        _systemMessages[modelId] = new { role = "system", content = message };
+        lock (_systemMessageLock)
+        {
+            _systemMessages[modelId] = new { role = "system", content = message };
+        }
     }
 
     // Set memory size for conversation history
@@ -32,9 +42,12 @@
         {
             _memorySize = size;
             // Trim all existing conversations
-            foreach (var modelId in _conversationHistories.Keys.ToList())
+            lock (_conversationLock)
             {
-                TrimConversationHistory(modelId);
+                foreach (var modelId in _conversationHistories.Keys.ToList())
+                {
+                    TrimConversationHistoryInternal(modelId);
+                }
             }
         }
     }
@@ -42,7 +55,16 @@
     // Trim conversation history to memory size
     protected static void TrimConversationHistory(string modelId)
     {
-        EnsureConversationExists(modelId);
+        lock (_conversationLock)
+        {
+            TrimConversationHistoryInternal(modelId);
+        }
+    }
+
+    // Internal method for trimming (assumes lock is already held)
+    private static void TrimConversationHistoryInternal(string modelId)
+    {
+        EnsureConversationExistsInternal(modelId);
 
         if (_conversationHistories[modelId].Count > _memorySize * 2) // Multiply by 2 because each exchange has user + assistant messages
         {
@@ -52,34 +74,49 @@
         }
     }
 
+    // Internal method for ensuring conversation exists (assumes lock is already held)
+    private static void EnsureConversationExistsInternal(string modelId)
+    {
+        if (!_conversationHistories.ContainsKey(modelId))
+        {
+            _conversationHistories[modelId] = new List<object>();
+        }
+    }
+
     // Clear conversation history for a specific model
     public static void ClearConversationHistory(string modelId)
     {
-        EnsureConversationExists(modelId);
-        _conversationHistories[modelId].Clear();
+        lock (_conversationLock)
+        {
+            EnsureConversationExistsInternal(modelId);
+            _conversationHistories[modelId].Clear();
+        }
     }
 
     // Clear all conversation histories
     public static void ClearAllConversationHistories()
     {
-        try
+        lock (_conversationLock)
         {
-            foreach (var modelId in _conversationHistories.Keys.ToList())
+            try
             {
-                try
+                foreach (var modelId in _conversationHistories.Keys.ToList())
                 {
-                    _conversationHistories[modelId].Clear();
-                }
-                catch
-                {
-                    // Ignore any errors and continue without clearing
+                    try
+                    {
+                        _conversationHistories[modelId].Clear();
+                    }
+                    catch
+                    {
+                        // Ignore any errors and continue without clearing
+                    }
                 }
             }
-        }
-        catch (Exception ex)
-        {
-            // Optionally log or handle the exception as needed
-            System.Diagnostics.Debug.WriteLine($"Error clearing conversation histories: {ex.Message}");
+            catch (Exception ex)
+            {
+                // Optionally log or handle the exception as needed
+                System.Diagnostics.Debug.WriteLine($"Error clearing conversation histories: {ex.Message}");
+            }
         }
     }
 
@@ -235,6 +272,41 @@
         decimal totalCost = costPerCall * estimatedInternalSearches;
 
         return totalCost;
+    }
+
+    // Thread-safe helper methods for derived classes to access conversation histories
+    protected static List<object> GetConversationHistorySafe(string modelId)
+    {
+        lock (_conversationLock)
+        {
+            EnsureConversationExistsInternal(modelId);
+            return new List<object>(_conversationHistories[modelId]); // Return a copy to avoid external modification
+        }
+    }
+
+    protected static void AddToConversationHistorySafe(string modelId, object message)
+    {
+        lock (_conversationLock)
+        {
+            EnsureConversationExistsInternal(modelId);
+            _conversationHistories[modelId].Add(message);
+        }
+    }
+
+    protected static bool ContainsSystemMessageSafe(string modelId)
+    {
+        lock (_systemMessageLock)
+        {
+            return _systemMessages.ContainsKey(modelId);
+        }
+    }
+
+    protected static object GetSystemMessageSafe(string modelId)
+    {
+        lock (_systemMessageLock)
+        {
+            return _systemMessages.TryGetValue(modelId, out var message) ? message : null;
+        }
     }
 
 }
