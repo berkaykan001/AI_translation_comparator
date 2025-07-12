@@ -267,11 +267,84 @@ namespace AI_Translator_Mobile_App
             }));
         }
 
-        // Rest of your OnFollowUpClicked method remains the same...
         private async void OnFollowUpClicked(object sender, EventArgs e)
         {
-            // Your existing follow-up code remains unchanged
-            // ... (keep the existing implementation)
+            // Get the button that was clicked
+            var button = (Button)sender;
+            
+            // Get the model number from CommandParameter
+            if (!int.TryParse(button.CommandParameter?.ToString(), out int modelNumber) || modelNumber < 1 || modelNumber > 5)
+            {
+                await DisplayAlert("Error", "Invalid model selection", "OK");
+                return;
+            }
+            
+            // Get appropriate Entry and Editor based on model number
+            Entry followUpEntry = null;
+            Editor outputEditor = null;
+            
+            switch (modelNumber)
+            {
+                case 1: followUpEntry = FollowUpInput1; outputEditor = OutputModel1; break;
+                case 2: followUpEntry = FollowUpInput2; outputEditor = OutputModel2; break;
+                case 3: followUpEntry = FollowUpInput3; outputEditor = OutputModel3; break;
+                case 4: followUpEntry = FollowUpInput4; outputEditor = OutputModel4; break;
+                case 5: followUpEntry = FollowUpInput5; outputEditor = OutputModel5; break;
+            }
+            
+            // Validate input
+            if (string.IsNullOrWhiteSpace(followUpEntry.Text))
+            {
+                await DisplayAlert("Error", "Please enter a follow-up question", "OK");
+                return;
+            }
+            
+            // Get the correct model mapping based on current mode and model number
+            string llm, model, label;
+            
+            if (currentMode == PageMode.GrammarCheck || currentMode == PageMode.UsageAnalysis)
+            {
+                if (modelNumber <= 2)
+                {
+                    // Use grammar check models for positions 1-2
+                    (llm, model, label) = grammarCheckModels[modelNumber];
+                }
+                else
+                {
+                    // Use AI models for positions 3-5
+                    (llm, model, label) = aiModelMappings[modelNumber];
+                }
+            }
+            else
+            {
+                // Translation mode - shouldn't have follow-ups, but handle gracefully
+                await DisplayAlert("Error", "Follow-up questions are not available in translation mode", "OK");
+                return;
+            }
+            
+            try
+            {
+                // Disable the button while processing
+                button.IsEnabled = false;
+                
+                // Make API call using the follow-up method
+                string response = await All_AI_Chat_Bots.AskFollowUp(llm, model, system_role_for_AI, followUpEntry.Text);
+                
+                // Update UI
+                outputEditor.Text = response;
+                AI_answers[modelNumber - 1] = response;
+                followUpEntry.Text = string.Empty;
+            }
+            catch (Exception ex)
+            {
+                await DisplayAlert("Error", $"An error occurred: {ex.Message}", "OK");
+                Debug.WriteLine($"Follow-up error: {ex}");
+            }
+            finally
+            {
+                // Re-enable the button
+                button.IsEnabled = true;
+            }
         }
     }
 
