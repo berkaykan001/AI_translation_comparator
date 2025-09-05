@@ -3,7 +3,7 @@
     public static async Task<string> AskAI(string LLM, string AImodel, string systemRole, string userMessage)
     {
         var result = await AskAIExtended(LLM, AImodel, systemRole, userMessage);
-        return $"{result.text} (Answer cost: ${result.estimatedCost})";
+        return result.text;
     }
 
     public static async Task<(string text, long elapsedMs, decimal estimatedCost)> AskAIExtended(
@@ -27,7 +27,7 @@
     public static async Task<string> AskFollowUp(string LLM, string AImodel, string systemRole, string followUpQuestion)
     {
         var result = await AskFollowUpExtended(LLM, AImodel, systemRole, followUpQuestion);
-        return $"{result.text} (Answer cost: ${result.estimatedCost})";
+        return result.text;
     }
 
     public static async Task<(string text, long elapsedMs, decimal estimatedCost)> AskFollowUpExtended(

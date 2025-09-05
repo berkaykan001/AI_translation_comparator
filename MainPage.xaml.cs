@@ -22,6 +22,7 @@ namespace AI_Translator_Mobile_App
         private string system_role_for_AI = "";
         private string[] AI_answers = new string[5];
         private PageMode currentMode = PageMode.Translation;
+        private string currentLanguage = "French";
 
         // Grammar check models
         private readonly Dictionary<int, (string LLM, string Model, string Label)> grammarCheckModels = new Dictionary<int, (string LLM, string Model, string Label)>
@@ -43,18 +44,38 @@ namespace AI_Translator_Mobile_App
         public TranslationPage()
         {
             InitializeComponent();
-            LanguagePicker.SelectedIndex = 1; // Set French as default
             UpdateCurrentMode(PageMode.Translation);
+            UpdateLanguageButtonStyles();
         }
 
         private string GetSelectedLanguage()
         {
-            return LanguagePicker.SelectedItem as string ?? "French";
+            return currentLanguage;
         }
 
-        private void OnLanguagePickerChanged(object sender, EventArgs e)
+        private void OnLanguageButtonClicked(object sender, EventArgs e)
         {
-            // Language change is handled by GetSelectedLanguage()
+            var button = sender as Button;
+            if (button == EnglishButton)
+            {
+                currentLanguage = "English";
+            }
+            else if (button == FrenchButton)
+            {
+                currentLanguage = "French";
+            }
+            else if (button == TurkishButton)
+            {
+                currentLanguage = "Turkish";
+            }
+            UpdateLanguageButtonStyles();
+        }
+
+        private void UpdateLanguageButtonStyles()
+        {
+            EnglishButton.BackgroundColor = currentLanguage == "English" ? (Color)Application.Current.Resources["AccentDark"] : (Color)Application.Current.Resources["FrameBackgroundColor"];
+            FrenchButton.BackgroundColor = currentLanguage == "French" ? (Color)Application.Current.Resources["AccentDark"] : (Color)Application.Current.Resources["FrameBackgroundColor"];
+            TurkishButton.BackgroundColor = currentLanguage == "Turkish" ? (Color)Application.Current.Resources["AccentDark"] : (Color)Application.Current.Resources["FrameBackgroundColor"];
         }
 
         private void OnModeButtonClicked(object sender, EventArgs e)
@@ -126,7 +147,7 @@ namespace AI_Translator_Mobile_App
             FollowUp4Container.IsVisible = showFollowUps;
             FollowUp5Container.IsVisible = showFollowUps;
 
-            LanguagePicker.IsVisible = showLanguageSelection;
+            LanguageSelector.IsVisible = showLanguageSelection;
         }
 
         private void UpdateButtonText()
@@ -161,8 +182,8 @@ namespace AI_Translator_Mobile_App
                         system_role_for_AI = $"Translate the given message to {GetSelectedLanguage()}. Do not add any other comments. Only translate. If there is more than one translation, include them all.";
                         break;
                     case PageMode.GrammarCheck:
-                        system_role_for_AI = "You'll be given a sentence or a phrase. Your ONLY task is to check if the grammar of the given message is correct or not. If it's not correct, explain why. " +
-                        "Given sentence/phrase might be a question, don't get confused and don't try to answer the question. ONLY check the grammar of the sentence. Make your explanation only in English";
+                        system_role_for_AI = "You'''ll be given a sentence or a phrase. Your ONLY task is to check if the grammar of the given message is correct or not. If it'''s not correct, explain why. " +
+                        "Given sentence/phrase might be a question, don'''t get confused and don'''t try to answer the question. ONLY check the grammar of the sentence. Make your explanation only in English";
                         break;
                     case PageMode.UsageAnalysis:
                         system_role_for_AI = "Analyze the given phrase/word for its usage context. Be very brief (1-2 sentences): formality level, frequency of use, and typical situations. Keep it short and practical.";

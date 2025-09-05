@@ -2,6 +2,7 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="AI_Translator_Mobile_App.TranslationPage"
+             Shell.NavBarIsVisible="False"
              BackgroundColor="{StaticResource PageBackgroundColor}">
     <Grid RowDefinitions="Auto, Auto, Auto, Auto, *" RowSpacing="10" Padding="15">
 
@@ -14,16 +15,14 @@
             </Grid>
         </Frame>
 
-        <!-- Language Picker -->
-        <Picker x:Name="LanguagePicker" Grid.Row="1" Title="Translate to:" SelectedIndexChanged="OnLanguagePickerChanged">
-            <Picker.ItemsSource>
-                <x:Array Type="{x:Type x:String}">
-                    <x:String>English</x:String>
-                    <x:String>French</x:String>
-                    <x:String>Turkish</x:String>
-                </x:Array>
-            </Picker.ItemsSource>
-        </Picker>
+        <!-- Language Selector -->
+        <Frame x:Name="LanguageSelector" Grid.Row="1" CornerRadius="10" Padding="5" BackgroundColor="{StaticResource FrameBackgroundColor}">
+            <Grid ColumnDefinitions="*,*,*" ColumnSpacing="5">
+                <Button x:Name="EnglishButton" Text="English" Clicked="OnLanguageButtonClicked" Style="{StaticResource SegmentedButton}" />
+                <Button x:Name="FrenchButton" Grid.Column="1" Text="French" Clicked="OnLanguageButtonClicked" Style="{StaticResource SegmentedButton}" />
+                <Button x:Name="TurkishButton" Grid.Column="2" Text="Turkish" Clicked="OnLanguageButtonClicked" Style="{StaticResource SegmentedButton}" />
+            </Grid>
+        </Frame>
 
         <!-- User Input -->
         <Frame Grid.Row="2" CornerRadius="10" Padding="0" BorderColor="{StaticResource AccentDark}">
