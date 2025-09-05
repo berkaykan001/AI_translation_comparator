@@ -18,9 +18,11 @@
     <Color x:Key="Magenta">#D600AA</Color>
     <Color x:Key="MidnightBlue">#190649</Color>
     <Color x:Key="OffBlack">#1f1f1f</Color>
+    <Color x:Key="PageBackgroundColor">#1f1f1f</Color>
 
     <Color x:Key="Gray100">#E1E1E1</Color>
     <Color x:Key="Gray200">#C8C8C8</Color>
+    <Color x:Key="TabBarUnselectedColor">#C8C8C8</Color>
     <Color x:Key="Gray300">#ACACAC</Color>
     <Color x:Key="Gray400">#919191</Color>
     <Color x:Key="Gray500">#6E6E6E</Color>
@@ -42,4 +44,14 @@
     <SolidColorBrush x:Key="Gray600Brush" Color="{StaticResource Gray600}"/>
     <SolidColorBrush x:Key="Gray900Brush" Color="{StaticResource Gray900}"/>
     <SolidColorBrush x:Key="Gray950Brush" Color="{StaticResource Gray950}"/>
+
+    <Color x:Key="FrameBackgroundColor">#2D2D2D</Color>
+    <Color x:Key="AccentLight">#D8BFD8</Color>
+    <Color x:Key="AccentDark">#483D8B</Color>
+
+    <Color x:Key="AccentSubtle">#3E3A30</Color>
+
+    <Color x:Key="AccentPrimary">#FFB300</Color>
+
+    <Color x:Key="SecondaryTextColor">#B3FFFFFF</Color>
 </ResourceDictionary>

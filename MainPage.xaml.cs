@@ -1,4 +1,4 @@
-﻿using System.Diagnostics;
+using System.Diagnostics;
 
 namespace AI_Translator_Mobile_App
 {
@@ -43,37 +43,45 @@ namespace AI_Translator_Mobile_App
         public TranslationPage()
         {
             InitializeComponent();
-
-            // Set default values - French is selected by default
-            FrenchRadio.IsChecked = true;
-            OnActionChanged(null, default);
-            UpdateButtonText();
+            LanguagePicker.SelectedIndex = 1; // Set French as default
+            UpdateCurrentMode(PageMode.Translation);
         }
 
-        // Helper method to get selected language from RadioButtons
         private string GetSelectedLanguage()
         {
-            if (EnglishRadio.IsChecked) return "English";
-            if (FrenchRadio.IsChecked) return "French";
-            if (TurkishRadio.IsChecked) return "Turkish";
-            return "French"; // Default fallback
+            return LanguagePicker.SelectedItem as string ?? "French";
         }
 
-        private void OnLanguageChanged(object sender, CheckedChangedEventArgs e)
+        private void OnLanguagePickerChanged(object sender, EventArgs e)
         {
-            // This method handles when language radio buttons are changed
-            // No specific action needed here since GetSelectedLanguage() will handle the logic
+            // Language change is handled by GetSelectedLanguage()
         }
 
-        void OnActionChanged(object sender, CheckedChangedEventArgs e)
+        private void OnModeButtonClicked(object sender, EventArgs e)
         {
-            // Determine current mode based on which radio button is checked
-            if (TranslateRadioButton.IsChecked)
-                currentMode = PageMode.Translation;
-            else if (GrammarCheckRadioButton.IsChecked)
-                currentMode = PageMode.GrammarCheck;
-            else if (UsageAnalysisRadioButton.IsChecked)
-                currentMode = PageMode.UsageAnalysis;
+            var button = sender as Button;
+            if (button == TranslateButton)
+            {
+                UpdateCurrentMode(PageMode.Translation);
+            }
+            else if (button == GrammarCheckButton)
+            {
+                UpdateCurrentMode(PageMode.GrammarCheck);
+            }
+            else if (button == UsageAnalysisButton)
+            {
+                UpdateCurrentMode(PageMode.UsageAnalysis);
+            }
+        }
+
+        private void UpdateCurrentMode(PageMode newMode)
+        {
+            currentMode = newMode;
+
+            // Update button styles
+            TranslateButton.BackgroundColor = currentMode == PageMode.Translation ? (Color)Application.Current.Resources["AccentDark"] : (Color)Application.Current.Resources["FrameBackgroundColor"];
+            GrammarCheckButton.BackgroundColor = currentMode == PageMode.GrammarCheck ? (Color)Application.Current.Resources["AccentDark"] : (Color)Application.Current.Resources["FrameBackgroundColor"];
+            UsageAnalysisButton.BackgroundColor = currentMode == PageMode.UsageAnalysis ? (Color)Application.Current.Resources["AccentDark"] : (Color)Application.Current.Resources["FrameBackgroundColor"];
 
             UpdateButtonText();
 
@@ -81,7 +89,6 @@ namespace AI_Translator_Mobile_App
             switch (currentMode)
             {
                 case PageMode.Translation:
-                    // In translation mode, first 2 are translation services, last 3 are AI models
                     Model1Label.Text = "DeepL";
                     Model2Label.Text = "Google Translate";
                     Model3Label.Text = aiModelMappings[3].Label;
@@ -91,7 +98,6 @@ namespace AI_Translator_Mobile_App
                     break;
 
                 case PageMode.GrammarCheck:
-                    // In grammar check mode, all 5 are AI models
                     Model1Label.Text = grammarCheckModels[1].Label;
                     Model2Label.Text = grammarCheckModels[2].Label;
                     Model3Label.Text = aiModelMappings[3].Label;
@@ -101,7 +107,6 @@ namespace AI_Translator_Mobile_App
                     break;
 
                 case PageMode.UsageAnalysis:
-                    // In usage analysis mode, all 5 are AI models (same as grammar check)
                     Model1Label.Text = grammarCheckModels[1].Label;
                     Model2Label.Text = grammarCheckModels[2].Label;
                     Model3Label.Text = aiModelMappings[3].Label;
@@ -120,11 +125,8 @@ namespace AI_Translator_Mobile_App
             FollowUp3Container.IsVisible = showFollowUps;
             FollowUp4Container.IsVisible = showFollowUps;
             FollowUp5Container.IsVisible = showFollowUps;
-            
-            EnglishRadio.IsVisible = showLanguageSelection;
-            FrenchRadio.IsVisible = showLanguageSelection;
-            TurkishRadio.IsVisible = showLanguageSelection;
-            LanguageLabel.IsVisible = showLanguageSelection;
+
+            LanguagePicker.IsVisible = showLanguageSelection;
         }
 
         private void UpdateButtonText()
@@ -147,14 +149,12 @@ namespace AI_Translator_Mobile_App
                 return;
             }
 
-            // Show loading indicator and disable button while processing
             TranslatorLoadingIndicator.IsVisible = true;
             TranslatorLoadingIndicator.IsRunning = true;
             ProcessButton.IsEnabled = false;
 
             try
             {
-                // System role selection
                 switch (currentMode)
                 {
                     case PageMode.Translation:
@@ -182,10 +182,8 @@ namespace AI_Translator_Mobile_App
                         break;
                 }
 
-                // Tasks 3-5: AI models (for all modes)
                 await ProcessAIModels(InputEntry.Text, system_role_for_AI, tasks);
 
-                // Wait for all tasks to complete
                 await Task.WhenAll(tasks);
             }
             catch (Exception ex)
@@ -195,19 +193,16 @@ namespace AI_Translator_Mobile_App
             }
             finally
             {
-                // Hide loading indicator and re-enable button when finished (even if there was an error)
                 TranslatorLoadingIndicator.IsVisible = false;
                 TranslatorLoadingIndicator.IsRunning = false;
                 ProcessButton.IsEnabled = true;
             }
         }
 
-        // Helper method to handle translation services
         private async Task ProcessTranslationServices(string inputText, List<Task> tasks)
         {
             string selectedLanguage = GetSelectedLanguage();
 
-            // Add translation service tasks
             tasks.Add(CreateTranslationTask("DeepL", selectedLanguage, inputText, 0, OutputModel1));
             tasks.Add(CreateTranslationTask("Google", selectedLanguage, inputText, 1, OutputModel2));
         }
@@ -222,7 +217,6 @@ namespace AI_Translator_Mobile_App
             });
         }
 
-        // Helper method to handle grammar check
         private async Task ProcessGrammarCheck(string inputText, string systemRole, List<Task> tasks)
         {
             for (int i = 0; i < 2; i++)
@@ -244,10 +238,8 @@ namespace AI_Translator_Mobile_App
             }
         }
 
-        // Helper method to handle AI models
         private async Task ProcessAIModels(string inputText, string systemRole, List<Task> tasks)
         {
-            // Add slot 3, 4 and 5 AI models
             tasks.Add(Task.Run(async () => {
                 AI_answers[2] = await All_AI_Chat_Bots.AskAI(
                     aiModelMappings[3].LLM, aiModelMappings[3].Model, systemRole, inputText);
@@ -269,17 +261,14 @@ namespace AI_Translator_Mobile_App
 
         private async void OnFollowUpClicked(object sender, EventArgs e)
         {
-            // Get the button that was clicked
             var button = (Button)sender;
             
-            // Get the model number from CommandParameter
             if (!int.TryParse(button.CommandParameter?.ToString(), out int modelNumber) || modelNumber < 1 || modelNumber > 5)
             {
                 await DisplayAlert("Error", "Invalid model selection", "OK");
                 return;
             }
             
-            // Get appropriate Entry and Editor based on model number
             Entry followUpEntry = null;
             Editor outputEditor = null;
             
@@ -292,62 +281,50 @@ namespace AI_Translator_Mobile_App
                 case 5: followUpEntry = FollowUpInput5; outputEditor = OutputModel5; break;
             }
             
-            // Validate input
             if (string.IsNullOrWhiteSpace(followUpEntry.Text))
             {
                 await DisplayAlert("Error", "Please enter a follow-up question", "OK");
                 return;
             }
             
-            // Get the correct model mapping based on current mode and model number
             string llm, model, label;
             
             if (currentMode == PageMode.GrammarCheck || currentMode == PageMode.UsageAnalysis)
             {
                 if (modelNumber <= 2)
                 {
-                    // Use grammar check models for positions 1-2
                     (llm, model, label) = grammarCheckModels[modelNumber];
                 }
                 else
                 {
-                    // Use AI models for positions 3-5
                     (llm, model, label) = aiModelMappings[modelNumber];
                 }
             }
             else
             {
-                // Translation mode - shouldn't have follow-ups, but handle gracefully
                 await DisplayAlert("Error", "Follow-up questions are not available in translation mode", "OK");
                 return;
             }
             
             try
             {
-                // Disable the button while processing
                 button.IsEnabled = false;
                 
-                // Make API call using the follow-up method
                 string response = await All_AI_Chat_Bots.AskFollowUp(llm, model, system_role_for_AI, followUpEntry.Text);
                 
-                // Update UI
                 outputEditor.Text = response;
                 AI_answers[modelNumber - 1] = response;
                 followUpEntry.Text = string.Empty;
             }
             catch (Exception ex)
             {
-                await DisplayAlert("Error", $"An error occurred: {ex.Message}", "OK");
+                await DisplayAlert("Error", $"Follow-up error: {ex}", "OK");
                 Debug.WriteLine($"Follow-up error: {ex}");
             }
             finally
             {
-                // Re-enable the button
                 button.IsEnabled = true;
             }
         }
     }
-
-    
-
 }
