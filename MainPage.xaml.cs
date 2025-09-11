@@ -335,10 +335,10 @@ namespace AI_Translator_Mobile_App
             {
                 button.IsEnabled = false;
                 
-                string response = await All_AI_Chat_Bots.AskFollowUp(llm, model, system_role_for_AI, followUpEntry.Text);
+                var response = await All_AI_Chat_Bots.AskFollowUp(llm, model, system_role_for_AI, followUpEntry.Text);
                 
-                outputEditor.Text = response;
-                AI_answers[modelNumber - 1] = response;
+                outputEditor.Text = response.text;
+                AI_answers[modelNumber - 1] = response.text;
                 followUpEntry.Text = string.Empty;
             }
             catch (Exception ex)
