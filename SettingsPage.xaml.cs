@@ -21,7 +21,7 @@ namespace AI_Translator_Mobile_App
             "gemini-2.5-pro", "gemini-2.5-flash"
         };
 
-        private List<CheckBox> languageCheckBoxes = new List<CheckBox>();
+        private List<Tuple<CheckBox, Label>> languageCheckBoxes = new List<Tuple<CheckBox, Label>>();
 
         public SettingsPage()
         {
@@ -35,16 +35,21 @@ namespace AI_Translator_Mobile_App
         {
             foreach (var lang in languages)
             {
-                var checkBox = new CheckBox { Content = lang };
+                var checkBox = new CheckBox();
+                var label = new Label { Text = lang, VerticalOptions = LayoutOptions.Center };
+                var stackLayout = new HorizontalStackLayout { Spacing = 10 };
+                stackLayout.Children.Add(checkBox);
+                stackLayout.Children.Add(label);
+
                 checkBox.CheckedChanged += OnLanguageCheckBoxChanged;
-                languageCheckBoxes.Add(checkBox);
-                LanguageFlexLayout.Children.Add(checkBox);
+                languageCheckBoxes.Add(new Tuple<CheckBox, Label>(checkBox, label));
+                LanguageFlexLayout.Children.Add(stackLayout);
             }
         }
 
         private void OnLanguageCheckBoxChanged(object sender, CheckedChangedEventArgs e)
         {
-            var selectedCheckBoxes = languageCheckBoxes.Where(cb => cb.IsChecked).ToList();
+            var selectedCheckBoxes = languageCheckBoxes.Where(cb => cb.Item1.IsChecked).ToList();
             if (selectedCheckBoxes.Count > 3)
             {
                 ((CheckBox)sender).IsChecked = false;
@@ -70,11 +75,11 @@ namespace AI_Translator_Mobile_App
         private void LoadSettings()
         {
             var selectedLanguages = Preferences.Get("SelectedLanguages", "English,French,Turkish").Split(',').ToList();
-            foreach (var checkBox in languageCheckBoxes)
+            foreach (var cb in languageCheckBoxes)
             {
-                if (selectedLanguages.Contains(checkBox.Content.ToString()))
+                if (selectedLanguages.Contains(cb.Item2.Text))
                 {
-                    checkBox.IsChecked = true;
+                    cb.Item1.IsChecked = true;
                 }
             }
 
@@ -99,7 +104,7 @@ namespace AI_Translator_Mobile_App
 
         private void OnSaveClicked(object sender, EventArgs e)
         {
-            var selectedLanguages = languageCheckBoxes.Where(cb => cb.IsChecked).Select(cb => cb.Content.ToString()).ToList();
+            var selectedLanguages = languageCheckBoxes.Where(cb => cb.Item1.IsChecked).Select(cb => cb.Item2.Text).ToList();
             if (selectedLanguages.Count > 0)
             {
                 Preferences.Set("SelectedLanguages", string.Join(",", selectedLanguages));
