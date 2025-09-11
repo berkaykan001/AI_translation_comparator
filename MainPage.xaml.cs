@@ -246,7 +246,8 @@ namespace AI_Translator_Mobile_App
                 int modelIndex = i;
 
                 tasks.Add(Task.Run(async () => {
-                    AI_answers[modelIndex] = await All_AI_Chat_Bots.AskAI(llm, model, systemRole, inputText);
+                    var result = await All_AI_Chat_Bots.AskAI(llm, model, systemRole, inputText);
+                    AI_answers[modelIndex] = result.text;
 
                     MainThread.BeginInvokeOnMainThread(() => {
                         switch (modelIndex)
