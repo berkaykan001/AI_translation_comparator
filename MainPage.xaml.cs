@@ -268,8 +268,9 @@ namespace AI_Translator_Mobile_App
             }));
 
             tasks.Add(Task.Run(async () => {
-                AI_answers[3] = await All_AI_Chat_Bots.AskAI(
+                var result = await All_AI_Chat_Bots.AskAI(
                     aiModelMappings[4].LLM, aiModelMappings[4].Model, systemRole, inputText);
+                AI_answers[3] = result.text;
                 MainThread.BeginInvokeOnMainThread(() => OutputModel4.Text = AI_answers[3]);
             }));
 
