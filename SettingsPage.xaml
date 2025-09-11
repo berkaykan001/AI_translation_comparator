@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="AI_Translator_Mobile_App.SettingsPage">
+    <ScrollView>
+        <StackLayout Padding="20" Spacing="20">
+
+            <Frame>
+                <StackLayout>
+                    <Label Text="Languages" FontSize="20" FontAttributes="Bold" />
+                    <FlexLayout x:Name="LanguageFlexLayout" Wrap="Wrap" />
+                </StackLayout>
+            </Frame>
+
+            <Frame>
+                <StackLayout>
+                    <Label Text="Translation Models" FontSize="20" FontAttributes="Bold" />
+                    <Label Text="Model 1" />
+                    <Picker x:Name="TranslationModel1Picker" />
+                    <Label Text="Model 2" />
+                    <Picker x:Name="TranslationModel2Picker" />
+                    <Label Text="Model 3" />
+                    <Picker x:Name="TranslationModel3Picker" />
+                    <Label Text="Model 4" />
+                    <Picker x:Name="TranslationModel4Picker" />
+                    <Label Text="Model 5" />
+                    <Picker x:Name="TranslationModel5Picker" />
+                </StackLayout>
+            </Frame>
+
+            <Frame>
+                <StackLayout>
+                    <Label Text="Grammar Check Models" FontSize="20" FontAttributes="Bold" />
+                    <Label Text="Model 1" />
+                    <Picker x:Name="GrammarModel1Picker" />
+                    <Label Text="Model 2" />
+                    <Picker x:Name="GrammarModel2Picker" />
+                    <Label Text="Model 3" />
+                    <Picker x:Name="GrammarModel3Picker" />
+                    <Label Text="Model 4" />
+                    <Picker x:Name="GrammarModel4Picker" />
+                    <Label Text="Model 5" />
+                    <Picker x:Name="GrammarModel5Picker" />
+                </StackLayout>
+            </Frame>
+
+            <Frame>
+                <StackLayout>
+                    <Label Text="Usage Analysis Models" FontSize="20" FontAttributes="Bold" />
+                    <Label Text="Model 1" />
+                    <Picker x:Name="UsageModel1Picker" />
+                    <Label Text="Model 2" />
+                    <Picker x:Name="UsageModel2Picker" />
+                    <Label Text="Model 3" />
+                    <Picker x:Name="UsageModel3Picker" />
+                    <Label Text="Model 4" />
+                    <Picker x:Name="UsageModel4Picker" />
+                    <Label Text="Model 5" />
+                    <Picker x:Name="UsageModel5Picker" />
+                </StackLayout>
+            </Frame>
+
+            <Button Text="Save" Clicked="OnSaveClicked" />
+        </StackLayout>
+    </ScrollView>
+</ContentPage>

@@ -24,58 +24,101 @@ namespace AI_Translator_Mobile_App
         private PageMode currentMode = PageMode.Translation;
         private string currentLanguage = "French";
 
-        // Grammar check models
-        private readonly Dictionary<int, (string LLM, string Model, string Label)> grammarCheckModels = new Dictionary<int, (string LLM, string Model, string Label)>
-    {
-        { 1, ("OpenRouter", "google/gemini-2.5-flash-preview", "Google Gemini 2.5 Flash") },
-        { 2, ("OpenAI", "gpt-4.1-2025-04-14", "OpenAI GPT-4.1") }
-    };
-
-        // Translation AI models
-        public static readonly Dictionary<int, (string LLM, string Model, string Label)> TranslationAiModels = new Dictionary<int, (string LLM, string Model, string Label)>
-    {
-        { 3, ("Claude", "claude-sonnet-4-20250514", "Claude 4 Sonnet") },
-        { 4, ("OpenAI", "gpt-4o-2024-08-06", "OpenAI GPT-4o") },
-        { 5, ("OpenRouter", "meta-llama/llama-4-maverick", "Meta Llama 4 Maverick") }
-    };
-
-        private Dictionary<int, (string LLM, string Model, string Label)> aiModelMappings = TranslationAiModels;
+        private Dictionary<int, (string LLM, string Model, string Label)> grammarCheckModels = new Dictionary<int, (string LLM, string Model, string Label)>();
+        private Dictionary<int, (string LLM, string Model, string Label)> translationAiModels = new Dictionary<int, (string LLM, string Model, string Label)>();
+        private Dictionary<int, (string LLM, string Model, string Label)> usageAnalysisModels = new Dictionary<int, (string LLM, string Model, string Label)>();
 
         public TranslationPage()
         {
             InitializeComponent();
+            LoadSettings();
             UpdateCurrentMode(PageMode.Translation);
-            UpdateLanguageButtonStyles();
         }
 
-        private string GetSelectedLanguage()
+        protected override void OnAppearing()
         {
-            return currentLanguage;
+            base.OnAppearing();
+            LoadSettings();
+            UpdateCurrentMode(currentMode);
+        }
+
+        private void LoadSettings()
+        {
+            var selectedLanguages = Preferences.Get("SelectedLanguages", "English,French,Turkish").Split(',');
+            currentLanguage = selectedLanguages[0];
+            CreateLanguageButtons(selectedLanguages);
+
+            translationAiModels = new Dictionary<int, (string LLM, string Model, string Label)>
+            {
+                { 1, ("DeepL", "", "DeepL") },
+                { 2, ("Google", "", "Google Translate") },
+                { 3, ("Claude", Preferences.Get("TranslationModel3", "claude-4-sonnet"), "Claude Sonnet 4") },
+                { 4, ("OpenAI", Preferences.Get("TranslationModel4", "gpt-4o"), "OpenAI GPT-4o") },
+                { 5, ("Gemini", Preferences.Get("TranslationModel5", "gemini-2.5-pro"), "Gemini 2.5 Pro") }
+            };
+
+            grammarCheckModels = new Dictionary<int, (string LLM, string Model, string Label)>
+            {
+                { 1, ("OpenAI", Preferences.Get("GrammarModel1", "gpt-4o-mini"), "OpenAI GPT-4o mini") },
+                { 2, ("Claude", Preferences.Get("GrammarModel2", "claude-3-haiku"), "Claude Haiku 3") },
+                { 3, ("Gemini", Preferences.Get("GrammarModel3", "gemini-2.5-flash"), "Gemini 2.5 Flash") },
+                { 4, ("Grok", Preferences.Get("GrammarModel4", "grok-4"), "Grok 4") },
+                { 5, ("Perplexity", Preferences.Get("GrammarModel5", "sonar"), "Sonar") }
+            };
+
+            usageAnalysisModels = new Dictionary<int, (string LLM, string Model, string Label)>
+            {
+                { 1, ("OpenAI", Preferences.Get("UsageModel1", "gpt-4o-mini"), "OpenAI GPT-4o mini") },
+                { 2, ("Claude", Preferences.Get("UsageModel2", "claude-3-haiku"), "Claude Haiku 3") },
+                { 3, ("Gemini", Preferences.Get("UsageModel3", "gemini-2.5-flash"), "Gemini 2.5 Flash") },
+                { 4, ("Grok", Preferences.Get("UsageModel4", "grok-4"), "Grok 4") },
+                { 5, ("Perplexity", Preferences.Get("UsageModel5", "sonar"), "Sonar") }
+            };
+        }
+
+        private void CreateLanguageButtons(string[] languages)
+        {
+            var languageGrid = (Grid)LanguageSelector.Content;
+            languageGrid.Children.Clear();
+            languageGrid.ColumnDefinitions.Clear();
+
+            for (int i = 0; i < languages.Length; i++)
+            {
+                languageGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Star });
+                var button = new Button
+                {
+                    Text = languages[i],
+                    Style = (Style)Application.Current.Resources["SegmentedButton"]
+                };
+                button.Clicked += OnLanguageButtonClicked;
+                Grid.SetColumn(button, i);
+                languageGrid.Children.Add(button);
+            }
+            UpdateLanguageButtonStyles();
         }
 
         private void OnLanguageButtonClicked(object sender, EventArgs e)
         {
             var button = sender as Button;
-            if (button == EnglishButton)
-            {
-                currentLanguage = "English";
-            }
-            else if (button == FrenchButton)
-            {
-                currentLanguage = "French";
-            }
-            else if (button == TurkishButton)
-            {
-                currentLanguage = "Turkish";
-            }
+            currentLanguage = button.Text;
             UpdateLanguageButtonStyles();
         }
 
         private void UpdateLanguageButtonStyles()
         {
-            EnglishButton.BackgroundColor = currentLanguage == "English" ? (Color)Application.Current.Resources["AccentDark"] : (Color)Application.Current.Resources["FrameBackgroundColor"];
-            FrenchButton.BackgroundColor = currentLanguage == "French" ? (Color)Application.Current.Resources["AccentDark"] : (Color)Application.Current.Resources["FrameBackgroundColor"];
-            TurkishButton.BackgroundColor = currentLanguage == "Turkish" ? (Color)Application.Current.Resources["AccentDark"] : (Color)Application.Current.Resources["FrameBackgroundColor"];
+            var languageGrid = (Grid)LanguageSelector.Content;
+            foreach (var child in languageGrid.Children)
+            {
+                if (child is Button button)
+                {
+                    button.BackgroundColor = button.Text == currentLanguage ? (Color)Application.Current.Resources["AccentDark"] : (Color)Application.Current.Resources["FrameBackgroundColor"];
+                }
+            }
+        }
+
+        private string GetSelectedLanguage()
+        {
+            return currentLanguage;
         }
 
         private void OnModeButtonClicked(object sender, EventArgs e)
@@ -110,29 +153,29 @@ namespace AI_Translator_Mobile_App
             switch (currentMode)
             {
                 case PageMode.Translation:
-                    Model1Label.Text = "DeepL";
-                    Model2Label.Text = "Google Translate";
-                    Model3Label.Text = aiModelMappings[3].Label;
-                    Model4Label.Text = aiModelMappings[4].Label;
-                    Model5Label.Text = aiModelMappings[5].Label;
+                    Model1Label.Text = translationAiModels[1].Label;
+                    Model2Label.Text = translationAiModels[2].Label;
+                    Model3Label.Text = translationAiModels[3].Label;
+                    Model4Label.Text = translationAiModels[4].Label;
+                    Model5Label.Text = translationAiModels[5].Label;
                     InputEntry.Placeholder = "Text to translate";
                     break;
 
                 case PageMode.GrammarCheck:
                     Model1Label.Text = grammarCheckModels[1].Label;
                     Model2Label.Text = grammarCheckModels[2].Label;
-                    Model3Label.Text = aiModelMappings[3].Label;
-                    Model4Label.Text = aiModelMappings[4].Label;
-                    Model5Label.Text = aiModelMappings[5].Label;
+                    Model3Label.Text = grammarCheckModels[3].Label;
+                    Model4Label.Text = grammarCheckModels[4].Label;
+                    Model5Label.Text = grammarCheckModels[5].Label;
                     InputEntry.Placeholder = "Text to check grammar";
                     break;
 
                 case PageMode.UsageAnalysis:
-                    Model1Label.Text = grammarCheckModels[1].Label;
-                    Model2Label.Text = grammarCheckModels[2].Label;
-                    Model3Label.Text = aiModelMappings[3].Label;
-                    Model4Label.Text = aiModelMappings[4].Label;
-                    Model5Label.Text = aiModelMappings[5].Label;
+                    Model1Label.Text = usageAnalysisModels[1].Label;
+                    Model2Label.Text = usageAnalysisModels[2].Label;
+                    Model3Label.Text = usageAnalysisModels[3].Label;
+                    Model4Label.Text = usageAnalysisModels[4].Label;
+                    Model5Label.Text = usageAnalysisModels[5].Label;
                     InputEntry.Placeholder = "Text to analyze usage";
                     break;
             }
@@ -196,14 +239,15 @@ namespace AI_Translator_Mobile_App
                 {
                     case PageMode.Translation:
                         await ProcessTranslationServices(InputEntry.Text, tasks);
+                        await ProcessAIModels(InputEntry.Text, system_role_for_AI, tasks);
                         break;
                     case PageMode.GrammarCheck:
-                    case PageMode.UsageAnalysis:
                         await ProcessGrammarCheck(InputEntry.Text, system_role_for_AI, tasks);
                         break;
+                    case PageMode.UsageAnalysis:
+                        await ProcessUsageAnalysis(InputEntry.Text, system_role_for_AI, tasks);
+                        break;
                 }
-
-                await ProcessAIModels(InputEntry.Text, system_role_for_AI, tasks);
 
                 await Task.WhenAll(tasks);
             }
@@ -240,7 +284,7 @@ namespace AI_Translator_Mobile_App
 
         private async Task ProcessGrammarCheck(string inputText, string systemRole, List<Task> tasks)
         {
-            for (int i = 0; i < 2; i++)
+            for (int i = 0; i < 5; i++)
             {
                 var (llm, model, Label) = grammarCheckModels[i + 1];
                 int modelIndex = i;
@@ -254,6 +298,34 @@ namespace AI_Translator_Mobile_App
                         {
                             case 0: OutputModel1.Text = AI_answers[0]; break;
                             case 1: OutputModel2.Text = AI_answers[1]; break;
+                            case 2: OutputModel3.Text = AI_answers[2]; break;
+                            case 3: OutputModel4.Text = AI_answers[3]; break;
+                            case 4: OutputModel5.Text = AI_answers[4]; break;
+                        }
+                    });
+                }));
+            }
+        }
+
+        private async Task ProcessUsageAnalysis(string inputText, string systemRole, List<Task> tasks)
+        {
+            for (int i = 0; i < 5; i++)
+            {
+                var (llm, model, Label) = usageAnalysisModels[i + 1];
+                int modelIndex = i;
+
+                tasks.Add(Task.Run(async () => {
+                    var result = await All_AI_Chat_Bots.AskAI(llm, model, systemRole, inputText);
+                    AI_answers[modelIndex] = result.text;
+
+                    MainThread.BeginInvokeOnMainThread(() => {
+                        switch (modelIndex)
+                        {
+                            case 0: OutputModel1.Text = AI_answers[0]; break;
+                            case 1: OutputModel2.Text = AI_answers[1]; break;
+                            case 2: OutputModel3.Text = AI_answers[2]; break;
+                            case 3: OutputModel4.Text = AI_answers[3]; break;
+                            case 4: OutputModel5.Text = AI_answers[4]; break;
                         }
                     });
                 }));
@@ -262,26 +334,25 @@ namespace AI_Translator_Mobile_App
 
         private async Task ProcessAIModels(string inputText, string systemRole, List<Task> tasks)
         {
-            tasks.Add(Task.Run(async () => {
-                var result2 = await All_AI_Chat_Bots.AskAI(
-                    aiModelMappings[3].LLM, aiModelMappings[3].Model, systemRole, inputText);
-                AI_answers[2] = result2.text;
-                MainThread.BeginInvokeOnMainThread(() => OutputModel3.Text = AI_answers[2]);
-            }));
+            for (int i = 2; i < 5; i++)
+            {
+                var (llm, model, Label) = translationAiModels[i + 1];
+                int modelIndex = i;
 
-            tasks.Add(Task.Run(async () => {
-                var result3 = await All_AI_Chat_Bots.AskAI(
-                    aiModelMappings[4].LLM, aiModelMappings[4].Model, systemRole, inputText);
-                AI_answers[3] = result3.text;
-                MainThread.BeginInvokeOnMainThread(() => OutputModel4.Text = AI_answers[3]);
-            }));
+                tasks.Add(Task.Run(async () => {
+                    var result = await All_AI_Chat_Bots.AskAI(llm, model, systemRole, inputText);
+                    AI_answers[modelIndex] = result.text;
 
-            tasks.Add(Task.Run(async () => {
-                var result4 = await All_AI_Chat_Bots.AskAI(
-                    aiModelMappings[5].LLM, aiModelMappings[5].Model, systemRole, inputText);
-                AI_answers[4] = result4.text;
-                MainThread.BeginInvokeOnMainThread(() => OutputModel5.Text = AI_answers[4]);
-            }));
+                    MainThread.BeginInvokeOnMainThread(() => {
+                        switch (modelIndex)
+                        {
+                            case 2: OutputModel3.Text = AI_answers[2]; break;
+                            case 3: OutputModel4.Text = AI_answers[3]; break;
+                            case 4: OutputModel5.Text = AI_answers[4]; break;
+                        }
+                    });
+                }));
+            }
         }
 
         private async void OnFollowUpClicked(object sender, EventArgs e)
@@ -314,16 +385,13 @@ namespace AI_Translator_Mobile_App
             
             string llm, model, label;
             
-            if (currentMode == PageMode.GrammarCheck || currentMode == PageMode.UsageAnalysis)
+            if (currentMode == PageMode.GrammarCheck)
             {
-                if (modelNumber <= 2)
-                {
-                    (llm, model, label) = grammarCheckModels[modelNumber];
-                }
-                else
-                {
-                    (llm, model, label) = aiModelMappings[modelNumber];
-                }
+                 (llm, model, label) = grammarCheckModels[modelNumber];
+            }
+            else if (currentMode == PageMode.UsageAnalysis)
+            {
+                 (llm, model, label) = usageAnalysisModels[modelNumber];
             }
             else
             {
@@ -350,6 +418,11 @@ namespace AI_Translator_Mobile_App
             {
                 button.IsEnabled = true;
             }
+        }
+
+        private async void OnSettingsClicked(object sender, EventArgs e)
+        {
+            await Navigation.PushAsync(new SettingsPage());
         }
     }
 }

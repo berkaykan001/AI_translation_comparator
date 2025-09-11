@@ -1,4 +1,4 @@
-﻿public static class LLMConfiguration
+public static class LLMConfiguration
 {
     // API Keys and Endpoints
     public static class ApiKeys
@@ -67,19 +67,9 @@
     { "sonar-pro", (15m, 15m) },
     { "sonar-reasoning", (15m, 15m) }, // Using same pricing as sonar 
     
-    // OpenRouter/Meta
-    { "meta-llama/llama-4-maverick", (0.16m, 0.6m) },
-    { "meta-llama/llama-4-scout", (0.08m, 0.3m) },
-    
-    // OpenRouter/Google
-    { "google/gemini-2.5-pro", (1.25m, 10m) },
-    { "google/gemini-2.5-flash", (0.50m, 2.00m) },
-    { "google/gemini-1.5-pro", (3.5m, 7m) },
-    { "google/gemini-1.5-flash", (0.35m, 0.7m) },
-
-    // LLMapi models
-    { "llama4-maverick", (0.16m, 0.6m) },
-    { "llama4-scout", (0.08m, 0.3m) },
+    // Meta
+    { "llama-4-maverick", (0.16m, 0.6m) },
+    { "llama-4-scout", (0.08m, 0.3m) },
 
     // Gemini
     { "gemini-2.5-pro", (1.25m, 10m) },

@@ -17,11 +17,7 @@
 
         <!-- Language Selector -->
         <Frame x:Name="LanguageSelector" Grid.Row="1" CornerRadius="10" Padding="5" BackgroundColor="{StaticResource FrameBackgroundColor}">
-            <Grid ColumnDefinitions="*,*,*" ColumnSpacing="5">
-                <Button x:Name="EnglishButton" Text="English" Clicked="OnLanguageButtonClicked" Style="{StaticResource SegmentedButton}" />
-                <Button x:Name="FrenchButton" Grid.Column="1" Text="French" Clicked="OnLanguageButtonClicked" Style="{StaticResource SegmentedButton}" />
-                <Button x:Name="TurkishButton" Grid.Column="2" Text="Turkish" Clicked="OnLanguageButtonClicked" Style="{StaticResource SegmentedButton}" />
-            </Grid>
+            <Grid ColumnSpacing="5" />
         </Frame>
 
         <!-- User Input -->
@@ -110,5 +106,21 @@
                 </Frame>
             </StackLayout>
         </ScrollView>
+
+        <!-- Settings Button -->
+        <Button Grid.Row="4" 
+                Text="⚙️"
+                Clicked="OnSettingsClicked"
+                HorizontalOptions="End" 
+                VerticalOptions="End" 
+                Margin="0,0,20,20"
+                CornerRadius="28"
+                HeightRequest="56"
+                WidthRequest="56"
+                BackgroundColor="{StaticResource AccentDark}"
+                TextColor="White"
+                FontAttributes="Bold"
+                FontSize="24"
+                />
     </Grid>
 </ContentPage>
