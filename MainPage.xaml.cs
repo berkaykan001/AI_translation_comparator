@@ -262,21 +262,23 @@ namespace AI_Translator_Mobile_App
         private async Task ProcessAIModels(string inputText, string systemRole, List<Task> tasks)
         {
             tasks.Add(Task.Run(async () => {
-                AI_answers[2] = await All_AI_Chat_Bots.AskAI(
+                var result2 = await All_AI_Chat_Bots.AskAI(
                     aiModelMappings[3].LLM, aiModelMappings[3].Model, systemRole, inputText);
+                AI_answers[2] = result2.text;
                 MainThread.BeginInvokeOnMainThread(() => OutputModel3.Text = AI_answers[2]);
             }));
 
             tasks.Add(Task.Run(async () => {
-                var result = await All_AI_Chat_Bots.AskAI(
+                var result3 = await All_AI_Chat_Bots.AskAI(
                     aiModelMappings[4].LLM, aiModelMappings[4].Model, systemRole, inputText);
-                AI_answers[3] = result.text;
+                AI_answers[3] = result3.text;
                 MainThread.BeginInvokeOnMainThread(() => OutputModel4.Text = AI_answers[3]);
             }));
 
             tasks.Add(Task.Run(async () => {
-                AI_answers[4] = await All_AI_Chat_Bots.AskAI(
+                var result4 = await All_AI_Chat_Bots.AskAI(
                     aiModelMappings[5].LLM, aiModelMappings[5].Model, systemRole, inputText);
+                AI_answers[4] = result4.text;
                 MainThread.BeginInvokeOnMainThread(() => OutputModel5.Text = AI_answers[4]);
             }));
         }
