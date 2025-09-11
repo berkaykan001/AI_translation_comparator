@@ -34,33 +34,36 @@
     public static Dictionary<string, (decimal InputCost, decimal OutputCost)> ModelCosts = new()
 {
     // OpenAI
-    { "gpt-4.1-2025-04-14", (2m, 8m) },
-    { "o3-2025-04-16", (2m, 8m) },
-    { "o1-2024-12-17", (15m, 60m) },
-    { "o4-mini-2025-04-16", (1.1m, 4.4m) },
-    { "gpt-4o-2024-08-06", (2.5m, 10m) },
-    { "gpt-4o-search-preview", (2.5m, 10m) }, // Bunun hesaplanması çok karışık, BaseChatService.CalculateOpenAIWebSearchCost methodu bunu hesaplıyo.
-    { "gpt-4o-mini-search-preview", (0.15m, 0.6m) }, // Bunun hesaplanması çok karışık, BaseChatService.CalculateOpenAIWebSearchCost methodu bunu hesaplıyo.
-    { "dall-e-3", (0m, 0.04m) }, // Cost per image (Bunlar hard code olarak pass ediliyo, burdan değil. Buraya gör diye koyuyom)
-    { "dall-e-2", (0m, 0.02m) }, // Cost per image (Bunlar hard code olarak pass ediliyo, burdan değil. Buraya gör diye koyuyom)
+    { "gpt-5", (1.25m, 10m) },
+    { "gpt-5-mini", (0.25m, 2m) },
+    { "gpt-5-nano", (0.05m, 0.40m) },
+    { "gpt-4o", (2.5m, 10m) },
+    { "gpt-4o-mini", (0.15m, 0.6m) },
+    { "gpt-4.1", (3m, 12m) },
+    { "gpt-4", (27.90m, 55.80m) },
+    { "gpt-3.5", (0.47m, 1.40m) },
+    { "dall-e-3", (0m, 0.04m) }, // Cost per image
+    { "dall-e-2", (0m, 0.02m) }, // Cost per image
     
     // Claude
-    { "claude-3-7-sonnet-20250219", (3m, 15m) },
-    { "claude-sonnet-4-20250514", (3m, 15m) },
-    { "claude-3-5-haiku-20241022", (0.8m, 4m) },
+    { "claude-4.1-opus", (15m, 75m) },
+    { "claude-4-sonnet", (3m, 15m) },
+    { "claude-3.5-sonnet", (3m, 15m) },
+    { "claude-3-opus", (15m, 75m) },
+    { "claude-3-haiku", (0.25m, 1.25m) },
     
     // MistralAI
-    { "ministral-8b-latest", (0.1m, 0.1m) },
-    { "ministral-3b-latest", (0.04m, 0.04m) },
-    { "mistral-small-latest", (0.1m, 0.3m) },
+    { "mistral-large-2", (3m, 9m) },
+    { "codestral", (1m, 3m) },
+    { "mistral-7b", (0.25m, 0.25m) },
     
     // Grok
+    { "grok-4", (3m, 15m) },
     { "grok-3-beta", (3m, 15m) },
     { "grok-3-fast-beta", (5m, 25m) },
-    { "grok-2-image-1212", (0m, 70m) }, // Cost per image (Bunlar hard code olarak pass ediliyo, burdan değil. Buraya gör diye koyuyom)
 
     // Perplexity
-    { "sonar", (15m, 15m) }, // Bu fiyatlar yanlış, bunun hesaplanması çok karışık, BaseChatService.CalculatePerplexityCost methodu bunu hesaplıyo.
+    { "sonar", (15m, 15m) }, // These prices are incorrect, the calculation is complex, BaseChatService.CalculatePerplexityCost method calculates it.
     { "sonar-pro", (15m, 15m) },
     { "sonar-reasoning", (15m, 15m) }, // Using same pricing as sonar 
     
@@ -69,18 +72,26 @@
     { "meta-llama/llama-4-scout", (0.08m, 0.3m) },
     
     // OpenRouter/Google
-    { "google/gemini-2.5-flash-preview", (0.15m, 0.6m) },
-    { "google/gemini-2.5-pro-preview", (1.25m, 10m) },
+    { "google/gemini-2.5-pro", (1.25m, 10m) },
+    { "google/gemini-2.5-flash", (0.50m, 2.00m) },
+    { "google/gemini-1.5-pro", (3.5m, 7m) },
+    { "google/gemini-1.5-flash", (0.35m, 0.7m) },
 
     // LLMapi models
     { "llama4-maverick", (0.16m, 0.6m) },
     { "llama4-scout", (0.08m, 0.3m) },
 
     // Gemini
-    { "gemini-2.0-flash", (0.1m, 0.4m) },
-    { "gemini-2.0-flash-lite", (0.075m, 0.3m) },
-    { "gemini-2.0-flash-preview-image-generation", (0m, 0.039m) },
+    { "gemini-2.5-pro", (1.25m, 10m) },
+    { "gemini-2.5-flash", (0.50m, 2.00m) },
+    { "gemini-1.5-pro", (3.5m, 7m) },
+    { "gemini-1.5-flash", (0.35m, 0.7m) },
     
+    // Cohere
+    { "command-r-plus-08-2024", (2.5m, 10m) },
+    { "command-r-plus-04-2024", (3m, 15m) },
+    { "command-r-03-2024", (0.5m, 1.5m) },
+
     // Default for unknown models
     { "default", (1m, 3m) }
 };

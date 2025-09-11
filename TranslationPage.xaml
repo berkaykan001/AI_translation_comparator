@@ -43,11 +43,13 @@
                 <Frame Style="{StaticResource OutputCard}">
                     <StackLayout>
                         <Label x:Name="Model1Label" Text="DeepL" Style="{StaticResource CardTitle}" />
-                        <Editor x:Name="OutputModel1" Style="{StaticResource OutputEditor}" />
-                        <StackLayout x:Name="FollowUp1Container" IsVisible="False" Spacing="5">
-                            <Entry x:Name="FollowUpInput1" Placeholder="Ask follow-up question..." />
-                            <Button Text="Send" Clicked="OnFollowUpClicked" CommandParameter="1" />
-                        </StackLayout>
+                        <Grid RowDefinitions="*,Auto">
+                            <Editor x:Name="OutputModel1" Style="{StaticResource OutputEditor}" Grid.Row="0" />
+                            <StackLayout x:Name="FollowUp1Container" IsVisible="False" Spacing="5" Grid.Row="1" VerticalOptions="End">
+                                <Entry x:Name="FollowUpInput1" Placeholder="Ask follow-up question..." />
+                                <Button Text="Send" Clicked="OnFollowUpClicked" CommandParameter="1" />
+                            </StackLayout>
+                        </Grid>
                     </StackLayout>
                 </Frame>
 
@@ -55,11 +57,13 @@
                 <Frame Style="{StaticResource OutputCard}">
                     <StackLayout>
                         <Label x:Name="Model2Label" Text="Google Translate" Style="{StaticResource CardTitle}" />
-                        <Editor x:Name="OutputModel2" Style="{StaticResource OutputEditor}" />
-                        <StackLayout x:Name="FollowUp2Container" IsVisible="False" Spacing="5">
-                            <Entry x:Name="FollowUpInput2" Placeholder="Ask follow-up question..." />
-                            <Button Text="Send" Clicked="OnFollowUpClicked" CommandParameter="2" />
-                        </StackLayout>
+                        <Grid RowDefinitions="*,Auto">
+                            <Editor x:Name="OutputModel2" Style="{StaticResource OutputEditor}" Grid.Row="0" />
+                            <StackLayout x:Name="FollowUp2Container" IsVisible="False" Spacing="5" Grid.Row="1" VerticalOptions="End">
+                                <Entry x:Name="FollowUpInput2" Placeholder="Ask follow-up question..." />
+                                <Button Text="Send" Clicked="OnFollowUpClicked" CommandParameter="2" />
+                            </StackLayout>
+                        </Grid>
                     </StackLayout>
                 </Frame>
 
@@ -67,11 +71,13 @@
                 <Frame Style="{StaticResource OutputCard}">
                     <StackLayout>
                         <Label x:Name="Model3Label" Text="Microsoft Translator" Style="{StaticResource CardTitle}" />
-                        <Editor x:Name="OutputModel3" Style="{StaticResource OutputEditor}" />
-                        <StackLayout x:Name="FollowUp3Container" IsVisible="False" Spacing="5">
-                            <Entry x:Name="FollowUpInput3" Placeholder="Ask follow-up question..." />
-                            <Button Text="Send" Clicked="OnFollowUpClicked" CommandParameter="3" />
-                        </StackLayout>
+                        <Grid RowDefinitions="*,Auto">
+                            <Editor x:Name="OutputModel3" Style="{StaticResource OutputEditor}" Grid.Row="0" />
+                            <StackLayout x:Name="FollowUp3Container" IsVisible="False" Spacing="5" Grid.Row="1" VerticalOptions="End">
+                                <Entry x:Name="FollowUpInput3" Placeholder="Ask follow-up question..." />
+                                <Button Text="Send" Clicked="OnFollowUpClicked" CommandParameter="3" />
+                            </StackLayout>
+                        </Grid>
                     </StackLayout>
                 </Frame>
 
@@ -79,11 +85,13 @@
                 <Frame Style="{StaticResource OutputCard}">
                     <StackLayout>
                         <Label x:Name="Model4Label" Text="OpenAI GPT-4o" Style="{StaticResource CardTitle}" />
-                        <Editor x:Name="OutputModel4" Style="{StaticResource OutputEditor}" />
-                        <StackLayout x:Name="FollowUp4Container" IsVisible="False" Spacing="5">
-                            <Entry x:Name="FollowUpInput4" Placeholder="Ask follow-up question..." />
-                            <Button Text="Send" Clicked="OnFollowUpClicked" CommandParameter="4" />
-                        </StackLayout>
+                        <Grid RowDefinitions="*,Auto">
+                            <Editor x:Name="OutputModel4" Style="{StaticResource OutputEditor}" Grid.Row="0" />
+                            <StackLayout x:Name="FollowUp4Container" IsVisible="False" Spacing="5" Grid.Row="1" VerticalOptions="End">
+                                <Entry x:Name="FollowUpInput4" Placeholder="Ask follow-up question..." />
+                                <Button Text="Send" Clicked="OnFollowUpClicked" CommandParameter="4" />
+                            </StackLayout>
+                        </Grid>
                     </StackLayout>
                 </Frame>
 
@@ -91,11 +99,13 @@
                 <Frame Style="{StaticResource OutputCard}">
                     <StackLayout>
                         <Label x:Name="Model5Label" Text="Mistral AI" Style="{StaticResource CardTitle}" />
-                        <Editor x:Name="OutputModel5" Style="{StaticResource OutputEditor}" />
-                        <StackLayout x:Name="FollowUp5Container" IsVisible="False" Spacing="5">
-                            <Entry x:Name="FollowUpInput5" Placeholder="Ask follow-up question..." />
-                            <Button Text="Send" Clicked="OnFollowUpClicked" CommandParameter="5" />
-                        </StackLayout>
+                        <Grid RowDefinitions="*,Auto">
+                            <Editor x:Name="OutputModel5" Style="{StaticResource OutputEditor}" Grid.Row="0" />
+                            <StackLayout x:Name="FollowUp5Container" IsVisible="False" Spacing="5" Grid.Row="1" VerticalOptions="End">
+                                <Entry x:Name="FollowUpInput5" Placeholder="Ask follow-up question..." />
+                                <Button Text="Send" Clicked="OnFollowUpClicked" CommandParameter="5" />
+                            </StackLayout>
+                        </Grid>
                     </StackLayout>
                 </Frame>
             </StackLayout>
