@@ -113,9 +113,9 @@ public static class TranslationService
         // Get the appropriate code based on the translation service
         if (languageCodes.TryGetValue(selectedLanguage, out var codes))
         {
-            if (translationService.Contains("google"))
+            if (translationService.IndexOf("google", StringComparison.OrdinalIgnoreCase) >= 0)
                 return codes.GoogleCode;
-            else if (translationService.Contains("deepl"))
+            else if (translationService.IndexOf("deepl", StringComparison.OrdinalIgnoreCase) >= 0)
                 return codes.DeepLCode;
             else // Microsoft
                 return codes.MicrosoftCode;
@@ -123,9 +123,9 @@ public static class TranslationService
         else
         {
             // Default to English if language not found
-            if (translationService.Contains("google"))
+            if (translationService.IndexOf("google", StringComparison.OrdinalIgnoreCase) >= 0)
                 return "en";
-            else if (translationService.Contains("deepl"))
+            else if (translationService.IndexOf("deepl", StringComparison.OrdinalIgnoreCase) >= 0)
                 return "EN-US";
             else // Microsoft
                 return "en";
