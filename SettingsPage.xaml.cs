@@ -71,6 +71,8 @@ namespace AI_Translator_Mobile_App
             {
                 picker.ItemsSource = models;
             }
+
+            NativeLanguagePicker.ItemsSource = languages;
         }
 
         private void LoadSettings()
@@ -101,6 +103,8 @@ namespace AI_Translator_Mobile_App
             UsageModel3Picker.SelectedItem = Preferences.Get("UsageModel3", "gemini-2.5-flash");
             UsageModel4Picker.SelectedItem = Preferences.Get("UsageModel4", "grok-4");
             UsageModel5Picker.SelectedItem = Preferences.Get("UsageModel5", "sonar");
+
+            NativeLanguagePicker.SelectedItem = Preferences.Get("NativeLanguage", "English");
         }
 
         private void OnSaveClicked(object sender, EventArgs e)
@@ -128,6 +132,8 @@ namespace AI_Translator_Mobile_App
             Preferences.Set("UsageModel3", UsageModel3Picker.SelectedItem as string);
             Preferences.Set("UsageModel4", UsageModel4Picker.SelectedItem as string);
             Preferences.Set("UsageModel5", UsageModel5Picker.SelectedItem as string);
+
+            Preferences.Set("NativeLanguage", NativeLanguagePicker.SelectedItem as string);
 
             DisplayAlert("Success", "Settings saved", "OK");
         }

@@ -14,6 +14,13 @@
 
             <Frame>
                 <StackLayout>
+                    <Label Text="Native Language for AI Explanations" FontSize="20" FontAttributes="Bold" />
+                    <Picker x:Name="NativeLanguagePicker" />
+                </StackLayout>
+            </Frame>
+
+            <Frame>
+                <StackLayout>
                     <Label Text="Translation Models" FontSize="20" FontAttributes="Bold" />
                     <Label Text="Model 1" />
                     <Picker x:Name="TranslationModel1Picker" />
