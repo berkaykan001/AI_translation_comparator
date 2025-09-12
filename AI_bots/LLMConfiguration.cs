@@ -45,11 +45,9 @@ public static class LLMConfiguration
         { "dall-e-2", "OpenAI" },
 
         // Claude
-        { "claude-opus-4-1-20250805", "Claude" },
         { "claude-sonnet-4-20250514", "Claude" },
-        { "claude-3.5-sonnet", "Claude" },
-        { "claude-3-opus", "Claude" },
         { "claude-3-5-haiku-20241022", "Claude" },
+        { "claude-opus-4-1-20250805", "Claude" },
 
         // MistralAI
         { "mistral-large-2", "Mistral" },
@@ -102,11 +100,9 @@ public static class LLMConfiguration
     { "dall-e-2", (0m, 0.02m) }, // Cost per image
     
     // Claude
-    { "claude-4.1-opus", (15m, 75m) },
-    { "claude-4-sonnet", (3m, 15m) },
-    { "claude-3.5-sonnet", (3m, 15m) },
-    { "claude-3-opus", (15m, 75m) },
-    { "claude-3-haiku", (0.25m, 1.25m) },
+    { "claude-sonnet-4-20250514", (3m, 15m) },
+    { "claude-3-5-haiku-20241022", (0.25m, 1.25m) },
+    { "claude-opus-4-1-20250805", (15m, 75m) },
     
     // MistralAI
     { "mistral-large-2", (3m, 9m) },

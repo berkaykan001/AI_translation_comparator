@@ -99,15 +99,20 @@ public static class TranslationService
             ["Italian"] = ("it", "IT", "it"),
             ["Spanish"] = ("es", "ES", "es"),
             ["Dutch"] = ("nl", "NL", "nl"),
-            ["Portuguese"] = ("pt", "PT-PT", "pt-pt") // Could use pt-br for Brazilian Portuguese
+            ["Russian"] = ("ru", "RU", "ru"),
+            ["Mandarin"] = ("zh-CN", "ZH", "zh-Hans"),
+            ["Cantonese"] = ("zh-TW", "ZH", "zh-Hant"),
+            ["Polish"] = ("pl", "PL", "pl"),
+            ["Portugal Portuguese"] = ("pt-PT", "PT-PT", "pt-pt"),
+            ["Brazilian Portuguese"] = ("pt-BR", "PT-BR", "pt-br")
         };
 
         // Get the appropriate code based on the translation service
         if (languageCodes.TryGetValue(selectedLanguage, out var codes))
         {
-            if (translationService.Contains("Google"))
+            if (translationService.Contains("google"))
                 return codes.GoogleCode;
-            else if (translationService.Contains("DeepL"))
+            else if (translationService.Contains("deepl"))
                 return codes.DeepLCode;
             else // Microsoft
                 return codes.MicrosoftCode;
@@ -115,9 +120,9 @@ public static class TranslationService
         else
         {
             // Default to English if language not found
-            if (translationService.Contains("Google"))
+            if (translationService.Contains("google"))
                 return "en";
-            else if (translationService.Contains("DeepL"))
+            else if (translationService.Contains("deepl"))
                 return "EN-US";
             else // Microsoft
                 return "en";
