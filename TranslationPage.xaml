@@ -28,8 +28,7 @@
         <!-- Action Button -->
         <Button x:Name="ProcessButton" Grid.Row="3" Text="Go" Clicked="OnProcessClicked" Style="{StaticResource MaterialButton}" />
 
-        <!-- Loading Indicator -->
-        <ActivityIndicator x:Name="TranslatorLoadingIndicator" Grid.Row="4" IsRunning="False" IsVisible="False" HorizontalOptions="Center" VerticalOptions="Center" Color="{StaticResource AccentDark}" />
+        
 
         <!-- Horizontal scrolling container for outputs -->
         <ScrollView Grid.Row="4" Orientation="Horizontal" HorizontalScrollBarVisibility="Always" Margin="0,10,0,0">
@@ -38,6 +37,7 @@
                 <!-- Translation Service 1 (DeepL) -->
                 <Frame Style="{StaticResource OutputCard}">
                     <StackLayout>
+                        <ActivityIndicator x:Name="Loading1" IsRunning="False" IsVisible="False" HorizontalOptions="Center" Color="{StaticResource AccentDark}" />
                         <Label x:Name="Model1Label" Text="DeepL" Style="{StaticResource CardTitle}" />
                         <Grid RowDefinitions="*,Auto">
                             <Editor x:Name="OutputModel1" Style="{StaticResource OutputEditor}" Grid.Row="0" />
@@ -52,6 +52,7 @@
                 <!-- Translation Service 2 (Google) -->
                 <Frame Style="{StaticResource OutputCard}">
                     <StackLayout>
+                        <ActivityIndicator x:Name="Loading2" IsRunning="False" IsVisible="False" HorizontalOptions="Center" Color="{StaticResource AccentDark}" />
                         <Label x:Name="Model2Label" Text="Google Translate" Style="{StaticResource CardTitle}" />
                         <Grid RowDefinitions="*,Auto">
                             <Editor x:Name="OutputModel2" Style="{StaticResource OutputEditor}" Grid.Row="0" />
@@ -66,6 +67,7 @@
                 <!-- Translation Service 3 (Microsoft) -->
                 <Frame Style="{StaticResource OutputCard}">
                     <StackLayout>
+                        <ActivityIndicator x:Name="Loading3" IsRunning="False" IsVisible="False" HorizontalOptions="Center" Color="{StaticResource AccentDark}" />
                         <Label x:Name="Model3Label" Text="Microsoft Translator" Style="{StaticResource CardTitle}" />
                         <Grid RowDefinitions="*,Auto">
                             <Editor x:Name="OutputModel3" Style="{StaticResource OutputEditor}" Grid.Row="0" />
@@ -80,6 +82,7 @@
                 <!-- AI Model 1 -->
                 <Frame Style="{StaticResource OutputCard}">
                     <StackLayout>
+                        <ActivityIndicator x:Name="Loading4" IsRunning="False" IsVisible="False" HorizontalOptions="Center" Color="{StaticResource AccentDark}" />
                         <Label x:Name="Model4Label" Text="OpenAI GPT-4o" Style="{StaticResource CardTitle}" />
                         <Grid RowDefinitions="*,Auto">
                             <Editor x:Name="OutputModel4" Style="{StaticResource OutputEditor}" Grid.Row="0" />
@@ -94,6 +97,7 @@
                 <!-- AI Model 2 -->
                 <Frame Style="{StaticResource OutputCard}">
                     <StackLayout>
+                        <ActivityIndicator x:Name="Loading5" IsRunning="False" IsVisible="False" HorizontalOptions="Center" Color="{StaticResource AccentDark}" />
                         <Label x:Name="Model5Label" Text="Mistral AI" Style="{StaticResource CardTitle}" />
                         <Grid RowDefinitions="*,Auto">
                             <Editor x:Name="OutputModel5" Style="{StaticResource OutputEditor}" Grid.Row="0" />

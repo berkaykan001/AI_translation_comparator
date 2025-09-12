@@ -224,8 +224,6 @@ namespace AI_Translator_Mobile_App
                 return;
             }
 
-            TranslatorLoadingIndicator.IsVisible = true;
-            TranslatorLoadingIndicator.IsRunning = true;
             ProcessButton.IsEnabled = false;
 
             try
@@ -268,8 +266,6 @@ namespace AI_Translator_Mobile_App
             }
             finally
             {
-                TranslatorLoadingIndicator.IsVisible = false;
-                TranslatorLoadingIndicator.IsRunning = false;
                 ProcessButton.IsEnabled = true;
             }
         }
@@ -283,10 +279,17 @@ namespace AI_Translator_Mobile_App
                 var (llm, model, Label) = translationAiModels[i + 1];
                 int modelIndex = i;
                 var outputEditor = (Editor)this.FindByName($"OutputModel{i + 1}");
+                var loadingIndicator = (ActivityIndicator)this.FindByName($"Loading{i + 1}");
+
+                MainThread.BeginInvokeOnMainThread(() =>
+                {
+                    loadingIndicator.IsVisible = true;
+                    loadingIndicator.IsRunning = true;
+                });
 
                 if (llm == "TranslationService")
                 {
-                    tasks.Add(CreateTranslationTask(model, GetSelectedLanguage(), inputText, modelIndex, outputEditor));
+                    tasks.Add(CreateTranslationTask(model, GetSelectedLanguage(), inputText, modelIndex, outputEditor, loadingIndicator));
                 }
                 else
                 {
@@ -298,27 +301,40 @@ namespace AI_Translator_Mobile_App
                         MainThread.BeginInvokeOnMainThread(() =>
                         {
                             outputEditor.Text = AI_answers[modelIndex];
+                            loadingIndicator.IsVisible = false;
+                            loadingIndicator.IsRunning = false;
                         });
                     }));
                 }
             }
         }
 
-        private Task CreateTranslationTask(string service, string language, string text, int resultIndex, Editor outputEditor)
+        private Task CreateTranslationTask(string service, string language, string text, int resultIndex, Editor outputEditor, ActivityIndicator loadingIndicator)
         {
             return Task.Run(async () => {
-                string languageCode = TranslationService.GetLanguageCode(language, service);
-                string serviceName = service;
-                if (service == "Google Translate")
+                try
                 {
-                    serviceName = "google";
+                    string languageCode = TranslationService.GetLanguageCode(language, service);
+                    string serviceName = service;
+                    if (service == "Google Translate")
+                    {
+                        serviceName = "google";
+                    }
+                    else if (service == "DeepL")
+                    {
+                        serviceName = "deepl";
+                    }
+                    AI_answers[resultIndex] = await TranslationService.TranslateAsync(serviceName, null, languageCode, text);
+                    MainThread.BeginInvokeOnMainThread(() => outputEditor.Text = AI_answers[resultIndex]);
                 }
-                else if (service == "DeepL")
+                finally
                 {
-                    serviceName = "deepl";
+                    MainThread.BeginInvokeOnMainThread(() =>
+                    {
+                        loadingIndicator.IsVisible = false;
+                        loadingIndicator.IsRunning = false;
+                    });
                 }
-                AI_answers[resultIndex] = await TranslationService.TranslateAsync(serviceName, null, languageCode, text);
-                MainThread.BeginInvokeOnMainThread(() => outputEditor.Text = AI_answers[resultIndex]);
             });
         }
 
@@ -328,20 +344,23 @@ namespace AI_Translator_Mobile_App
             {
                 var (llm, model, Label) = grammarCheckModels[i + 1];
                 int modelIndex = i;
+                var outputEditor = (Editor)this.FindByName($"OutputModel{i + 1}");
+                var loadingIndicator = (ActivityIndicator)this.FindByName($"Loading{i + 1}");
+
+                MainThread.BeginInvokeOnMainThread(() =>
+                {
+                    loadingIndicator.IsVisible = true;
+                    loadingIndicator.IsRunning = true;
+                });
 
                 tasks.Add(Task.Run(async () => {
                     var result = await All_AI_Chat_Bots.AskAI(llm, model, systemRole, inputText);
                     AI_answers[modelIndex] = result.text;
 
                     MainThread.BeginInvokeOnMainThread(() => {
-                        switch (modelIndex)
-                        {
-                            case 0: OutputModel1.Text = AI_answers[0]; break;
-                            case 1: OutputModel2.Text = AI_answers[1]; break;
-                            case 2: OutputModel3.Text = AI_answers[2]; break;
-                            case 3: OutputModel4.Text = AI_answers[3]; break;
-                            case 4: OutputModel5.Text = AI_answers[4]; break;
-                        }
+                        outputEditor.Text = AI_answers[modelIndex];
+                        loadingIndicator.IsVisible = false;
+                        loadingIndicator.IsRunning = false;
                     });
                 }));
             }
@@ -353,20 +372,23 @@ namespace AI_Translator_Mobile_App
             {
                 var (llm, model, Label) = usageAnalysisModels[i + 1];
                 int modelIndex = i;
+                var outputEditor = (Editor)this.FindByName($"OutputModel{i + 1}");
+                var loadingIndicator = (ActivityIndicator)this.FindByName($"Loading{i + 1}");
+
+                MainThread.BeginInvokeOnMainThread(() =>
+                {
+                    loadingIndicator.IsVisible = true;
+                    loadingIndicator.IsRunning = true;
+                });
 
                 tasks.Add(Task.Run(async () => {
                     var result = await All_AI_Chat_Bots.AskAI(llm, model, systemRole, inputText);
                     AI_answers[modelIndex] = result.text;
 
                     MainThread.BeginInvokeOnMainThread(() => {
-                        switch (modelIndex)
-                        {
-                            case 0: OutputModel1.Text = AI_answers[0]; break;
-                            case 1: OutputModel2.Text = AI_answers[1]; break;
-                            case 2: OutputModel3.Text = AI_answers[2]; break;
-                            case 3: OutputModel4.Text = AI_answers[3]; break;
-                            case 4: OutputModel5.Text = AI_answers[4]; break;
-                        }
+                        outputEditor.Text = AI_answers[modelIndex];
+                        loadingIndicator.IsVisible = false;
+                        loadingIndicator.IsRunning = false;
                     });
                 }));
             }
