@@ -12,6 +12,8 @@ public class OpenRouterChat : BaseChatService
 
         using var client = new HttpClient();
         client.DefaultRequestHeaders.Add("Authorization", $"Bearer {LLMConfiguration.ApiKeys.OpenRouter}");
+        client.DefaultRequestHeaders.Add("HTTP-Referer", "https://github.com/BME-Jamie/AI_Translator_Mobile_App");
+        client.DefaultRequestHeaders.Add("X-Title", "AI Translator Mobile App");
 
         // Build the messages array
         var messages = new List<object>();

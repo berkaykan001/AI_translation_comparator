@@ -30,6 +30,62 @@ public static class LLMConfiguration
         public static string OpenRouter = "https://openrouter.ai/api/v1/chat/completions";
     }
 
+    public static Dictionary<string, string> ModelProviders = new()
+    {
+        // OpenAI
+        { "gpt-5", "OpenAI" },
+        { "gpt-5-mini", "OpenAI" },
+        { "gpt-5-nano", "OpenAI" },
+        { "gpt-4o", "OpenAI" },
+        { "gpt-4o-mini", "OpenAI" },
+        { "gpt-4.1", "OpenAI" },
+        { "gpt-4", "OpenAI" },
+        { "gpt-3.5", "OpenAI" },
+        { "dall-e-3", "OpenAI" },
+        { "dall-e-2", "OpenAI" },
+
+        // Claude
+        { "claude-opus-4-1-20250805", "Claude" },
+        { "claude-sonnet-4-20250514", "Claude" },
+        { "claude-3.5-sonnet", "Claude" },
+        { "claude-3-opus", "Claude" },
+        { "claude-3-5-haiku-20241022", "Claude" },
+
+        // MistralAI
+        { "mistral-large-2", "Mistral" },
+        { "codestral", "Mistral" },
+        { "mistral-7b", "Mistral" },
+
+        // Grok
+        { "grok-4", "Grok" },
+        { "grok-3-beta", "Grok" },
+        { "grok-3-fast-beta", "Grok" },
+
+        // Perplexity
+        { "sonar", "Perplexity" },
+        { "sonar-pro", "Perplexity" },
+        { "sonar-reasoning", "Perplexity" },
+
+        // Meta (via OpenRouter)
+        { "meta-llama/llama-4-maverick", "OpenRouter" },
+        { "meta-llama/llama-4-scout", "OpenRouter" },
+
+        // Gemini
+        { "gemini-2.5-pro", "Gemini" },
+        { "gemini-2.5-flash", "Gemini" },
+        { "gemini-1.5-pro", "Gemini" },
+        { "gemini-1.5-flash", "Gemini" },
+
+        // Cohere (via OpenRouter)
+        { "command-r-plus-08-2024", "OpenRouter" },
+        { "command-r-plus-04-2024", "OpenRouter" },
+        { "command-r-03-2024", "OpenRouter" },
+
+        // Translation Services
+        { "DeepL", "TranslationService" },
+        { "Google Translate", "TranslationService" },
+    };
+
     // Cost per 1M tokens for each model (input/output)
     public static Dictionary<string, (decimal InputCost, decimal OutputCost)> ModelCosts = new()
 {
@@ -68,8 +124,8 @@ public static class LLMConfiguration
     { "sonar-reasoning", (15m, 15m) }, // Using same pricing as sonar 
     
     // Meta
-    { "llama-4-maverick", (0.16m, 0.6m) },
-    { "llama-4-scout", (0.08m, 0.3m) },
+    { "meta-llama/llama-4-maverick", (0.16m, 0.6m) },
+    { "meta-llama/llama-4-scout", (0.08m, 0.3m) },
 
     // Gemini
     { "gemini-2.5-pro", (1.25m, 10m) },
@@ -81,6 +137,10 @@ public static class LLMConfiguration
     { "command-r-plus-08-2024", (2.5m, 10m) },
     { "command-r-plus-04-2024", (3m, 15m) },
     { "command-r-03-2024", (0.5m, 1.5m) },
+
+    // Translation Services
+    { "DeepL", (0m, 0m) },
+    { "Google Translate", (0m, 0m) },
 
     // Default for unknown models
     { "default", (1m, 3m) }

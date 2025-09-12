@@ -17,8 +17,9 @@ namespace AI_Translator_Mobile_App
             "claude-4-sonnet", "claude-3-haiku",
             "grok-4",
             "sonar",
-            "llama-4-maverick", "llama-4-scout",
-            "gemini-2.5-pro", "gemini-2.5-flash"
+            "meta-llama/llama-4-maverick", "meta-llama/llama-4-scout",
+            "gemini-2.5-pro", "gemini-2.5-flash",
+            "DeepL", "Google Translate"
         };
 
         private List<Tuple<CheckBox, Label>> languageCheckBoxes = new List<Tuple<CheckBox, Label>>();
@@ -87,7 +88,7 @@ namespace AI_Translator_Mobile_App
             TranslationModel2Picker.SelectedItem = Preferences.Get("TranslationModel2", "claude-4-sonnet");
             TranslationModel3Picker.SelectedItem = Preferences.Get("TranslationModel3", "gemini-2.5-pro");
             TranslationModel4Picker.SelectedItem = Preferences.Get("TranslationModel4", "grok-4");
-            TranslationModel5Picker.SelectedItem = Preferences.Get("TranslationModel5", "llama-4-maverick");
+            TranslationModel5Picker.SelectedItem = Preferences.Get("TranslationModel5", "Llama-4-Maverick-17B-128E-Instruct-FP8");
 
             GrammarModel1Picker.SelectedItem = Preferences.Get("GrammarModel1", "gpt-4o-mini");
             GrammarModel2Picker.SelectedItem = Preferences.Get("GrammarModel2", "claude-3-haiku");

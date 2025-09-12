@@ -48,31 +48,42 @@ namespace AI_Translator_Mobile_App
             currentLanguage = selectedLanguages[0];
             CreateLanguageButtons(selectedLanguages);
 
+            // Helper function to get provider and model
+            (string LLM, string Model, string Label) GetModelInfo(string preferenceKey, string defaultModel)
+            {
+                var model = Preferences.Get(preferenceKey, defaultModel);
+                if (LLMConfiguration.ModelProviders.TryGetValue(model, out var provider))
+                {
+                    return (provider, model, model);
+                }
+                return ("OpenRouter", model, model);
+            }
+
             translationAiModels = new Dictionary<int, (string LLM, string Model, string Label)>
             {
-                { 1, ("DeepL", "", "DeepL") },
-                { 2, ("Google", "", "Google Translate") },
-                { 3, ("Claude", Preferences.Get("TranslationModel3", "claude-4-sonnet"), "Claude Sonnet 4") },
-                { 4, ("OpenAI", Preferences.Get("TranslationModel4", "gpt-4o"), "OpenAI GPT-4o") },
-                { 5, ("Gemini", Preferences.Get("TranslationModel5", "gemini-2.5-pro"), "Gemini 2.5 Pro") }
+                { 1, GetModelInfo("TranslationModel1", "DeepL") },
+                { 2, GetModelInfo("TranslationModel2", "Google Translate") },
+                { 3, GetModelInfo("TranslationModel3", "claude-3-haiku") },
+                { 4, GetModelInfo("TranslationModel4", "gpt-4o") },
+                { 5, GetModelInfo("TranslationModel5", "meta-llama/llama-4-maverick") }
             };
 
             grammarCheckModels = new Dictionary<int, (string LLM, string Model, string Label)>
             {
-                { 1, ("OpenAI", Preferences.Get("GrammarModel1", "gpt-4o-mini"), "OpenAI GPT-4o mini") },
-                { 2, ("Claude", Preferences.Get("GrammarModel2", "claude-3-haiku"), "Claude Haiku 3") },
-                { 3, ("Gemini", Preferences.Get("GrammarModel3", "gemini-2.5-flash"), "Gemini 2.5 Flash") },
-                { 4, ("Grok", Preferences.Get("GrammarModel4", "grok-4"), "Grok 4") },
-                { 5, ("Perplexity", Preferences.Get("GrammarModel5", "sonar"), "Sonar") }
+                { 1, GetModelInfo("GrammarModel1", "gpt-4o-mini") },
+                { 2, GetModelInfo("GrammarModel2", "claude-3-haiku") },
+                { 3, GetModelInfo("GrammarModel3", "gemini-1.5-flash") },
+                { 4, GetModelInfo("GrammarModel4", "grok-4") },
+                { 5, GetModelInfo("GrammarModel5", "sonar") }
             };
 
             usageAnalysisModels = new Dictionary<int, (string LLM, string Model, string Label)>
             {
-                { 1, ("OpenAI", Preferences.Get("UsageModel1", "gpt-4o-mini"), "OpenAI GPT-4o mini") },
-                { 2, ("Claude", Preferences.Get("UsageModel2", "claude-3-haiku"), "Claude Haiku 3") },
-                { 3, ("Gemini", Preferences.Get("UsageModel3", "gemini-2.5-flash"), "Gemini 2.5 Flash") },
-                { 4, ("Grok", Preferences.Get("UsageModel4", "grok-4"), "Grok 4") },
-                { 5, ("Perplexity", Preferences.Get("UsageModel5", "sonar"), "Sonar") }
+                { 1, GetModelInfo("UsageModel1", "gpt-4o-mini") },
+                { 2, GetModelInfo("UsageModel2", "claude-3-haiku") },
+                { 3, GetModelInfo("UsageModel3", "gemini-1.5-flash") },
+                { 4, GetModelInfo("UsageModel4", "grok-4") },
+                { 5, GetModelInfo("UsageModel5", "sonar") }
             };
         }
 
@@ -238,8 +249,7 @@ namespace AI_Translator_Mobile_App
                 switch (currentMode)
                 {
                     case PageMode.Translation:
-                        await ProcessTranslationServices(InputEntry.Text, tasks);
-                        await ProcessAIModels(InputEntry.Text, system_role_for_AI, tasks);
+                        await ProcessTranslations(InputEntry.Text, system_role_for_AI, tasks);
                         break;
                     case PageMode.GrammarCheck:
                         await ProcessGrammarCheck(InputEntry.Text, system_role_for_AI, tasks);
@@ -264,19 +274,49 @@ namespace AI_Translator_Mobile_App
             }
         }
 
-        private async Task ProcessTranslationServices(string inputText, List<Task> tasks)
-        {
-            string selectedLanguage = GetSelectedLanguage();
+        
 
-            tasks.Add(CreateTranslationTask("DeepL", selectedLanguage, inputText, 0, OutputModel1));
-            tasks.Add(CreateTranslationTask("Google", selectedLanguage, inputText, 1, OutputModel2));
+        private async Task ProcessTranslations(string inputText, string systemRole, List<Task> tasks)
+        {
+            for (int i = 0; i < 5; i++)
+            {
+                var (llm, model, Label) = translationAiModels[i + 1];
+                int modelIndex = i;
+                var outputEditor = (Editor)this.FindByName($"OutputModel{i + 1}");
+
+                if (llm == "TranslationService")
+                {
+                    tasks.Add(CreateTranslationTask(model, GetSelectedLanguage(), inputText, modelIndex, outputEditor));
+                }
+                else
+                {
+                    tasks.Add(Task.Run(async () =>
+                    {
+                        var result = await All_AI_Chat_Bots.AskAI(llm, model, systemRole, inputText);
+                        AI_answers[modelIndex] = result.text;
+
+                        MainThread.BeginInvokeOnMainThread(() =>
+                        {
+                            outputEditor.Text = AI_answers[modelIndex];
+                        });
+                    }));
+                }
+            }
         }
 
         private Task CreateTranslationTask(string service, string language, string text, int resultIndex, Editor outputEditor)
         {
             return Task.Run(async () => {
                 string languageCode = TranslationService.GetLanguageCode(language, service);
-                string serviceName = service.ToLower().Replace(" ", "");
+                string serviceName = service;
+                if (service == "Google Translate")
+                {
+                    serviceName = "google";
+                }
+                else if (service == "DeepL")
+                {
+                    serviceName = "deepl";
+                }
                 AI_answers[resultIndex] = await TranslationService.TranslateAsync(serviceName, null, languageCode, text);
                 MainThread.BeginInvokeOnMainThread(() => outputEditor.Text = AI_answers[resultIndex]);
             });
@@ -332,28 +372,7 @@ namespace AI_Translator_Mobile_App
             }
         }
 
-        private async Task ProcessAIModels(string inputText, string systemRole, List<Task> tasks)
-        {
-            for (int i = 2; i < 5; i++)
-            {
-                var (llm, model, Label) = translationAiModels[i + 1];
-                int modelIndex = i;
-
-                tasks.Add(Task.Run(async () => {
-                    var result = await All_AI_Chat_Bots.AskAI(llm, model, systemRole, inputText);
-                    AI_answers[modelIndex] = result.text;
-
-                    MainThread.BeginInvokeOnMainThread(() => {
-                        switch (modelIndex)
-                        {
-                            case 2: OutputModel3.Text = AI_answers[2]; break;
-                            case 3: OutputModel4.Text = AI_answers[3]; break;
-                            case 4: OutputModel5.Text = AI_answers[4]; break;
-                        }
-                    });
-                }));
-            }
-        }
+        
 
         private async void OnFollowUpClicked(object sender, EventArgs e)
         {
