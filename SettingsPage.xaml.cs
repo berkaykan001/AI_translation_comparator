@@ -8,7 +8,7 @@ namespace AI_Translator_Mobile_App
     {
         private readonly List<string> languages = new List<string>
         {
-            "English", "French", "Turkish", "Italian", "German", "Spanish", "Dutch", "Russian", "Japanese", "Cantonese", "Mandarin", "Polish", "Portugal Portuguese", "Brazilian Portuguese"
+            "English", "French", "Turkish", "Italian", "German", "Spanish", "Dutch", "Russian", "Japanese", "Cantonese", "Mandarin", "Polish", "Portugal Portuguese", "Brazilian Portuguese", "Korean", "Ukrainian"
         };
 
         private readonly List<string> models = new List<string>

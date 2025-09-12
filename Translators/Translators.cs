@@ -104,7 +104,10 @@ public static class TranslationService
             ["Cantonese"] = ("zh-TW", "ZH", "zh-Hant"),
             ["Polish"] = ("pl", "PL", "pl"),
             ["Portugal Portuguese"] = ("pt-PT", "PT-PT", "pt-pt"),
-            ["Brazilian Portuguese"] = ("pt-BR", "PT-BR", "pt-br")
+            ["Brazilian Portuguese"] = ("pt-BR", "PT-BR", "pt-br"),
+            ["Japanese"] = ("ja", "JA", "ja"),
+            ["Korean"] = ("ko", "KO", "ko"),
+            ["Ukrainian"] = ("uk", "UK", "uk")
         };
 
         // Get the appropriate code based on the translation service
