@@ -46,12 +46,13 @@
     <SolidColorBrush x:Key="Gray950Brush" Color="{StaticResource Gray950}"/>
 
     <Color x:Key="FrameBackgroundColor">#2D2D2D</Color>
-    <Color x:Key="AccentLight">#D8BFD8</Color>
-    <Color x:Key="AccentDark">#483D8B</Color>
+    <Color x:Key="AccentLight">#66B2FF</Color>
+    <Color x:Key="AccentDark">#0056B3</Color>
 
     <Color x:Key="AccentSubtle">#3E3A30</Color>
 
     <Color x:Key="AccentPrimary">#FFB300</Color>
 
     <Color x:Key="SecondaryTextColor">#B3FFFFFF</Color>
+    <Color x:Key="ReadableTextColor">#FFFFFF</Color>
 </ResourceDictionary>
