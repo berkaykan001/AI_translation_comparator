@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using AI_Translator_Mobile_App.AI_bots;
 
 namespace AI_Translator_Mobile_App
 {
@@ -52,11 +53,12 @@ namespace AI_Translator_Mobile_App
             (string LLM, string Model, string Label) GetModelInfo(string preferenceKey, string defaultModel)
             {
                 var model = Preferences.Get(preferenceKey, defaultModel);
+                var label = ModelDisplayNames.DisplayNames.TryGetValue(model, out var displayName) ? displayName : model;
                 if (LLMConfiguration.ModelProviders.TryGetValue(model, out var provider))
                 {
-                    return (provider, model, model);
+                    return (provider, model, label);
                 }
-                return ("OpenRouter", model, model);
+                return ("OpenRouter", model, label);
             }
 
             translationAiModels = new Dictionary<int, (string LLM, string Model, string Label)>
