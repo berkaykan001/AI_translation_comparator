@@ -33,40 +33,12 @@ namespace AI_Translator_Mobile_App
             "gemini-2.5-pro", "gemini-2.5-flash"
         };
 
-        private List<Tuple<CheckBox, Label>> languageCheckBoxes = new List<Tuple<CheckBox, Label>>();
-
         public SettingsPage()
         {
             InitializeComponent();
-            PopulateLanguageSelection();
             PopulatePickers();
             LoadSettings();
-        }
-
-        private void PopulateLanguageSelection()
-        {
-            foreach (var lang in languages)
-            {
-                var checkBox = new CheckBox();
-                var label = new Label { Text = lang, VerticalOptions = LayoutOptions.Center };
-                var stackLayout = new HorizontalStackLayout { Spacing = 10 };
-                stackLayout.Children.Add(checkBox);
-                stackLayout.Children.Add(label);
-
-                checkBox.CheckedChanged += OnLanguageCheckBoxChanged;
-                languageCheckBoxes.Add(new Tuple<CheckBox, Label>(checkBox, label));
-                LanguageFlexLayout.Children.Add(stackLayout);
-            }
-        }
-
-        private void OnLanguageCheckBoxChanged(object sender, CheckedChangedEventArgs e)
-        {
-            var selectedCheckBoxes = languageCheckBoxes.Where(cb => cb.Item1.IsChecked).ToList();
-            if (selectedCheckBoxes.Count > 3)
-            {
-                ((CheckBox)sender).IsChecked = false;
-                DisplayAlert("Limit Exceeded", "You can select up to 3 languages.", "OK");
-            }
+            SetupPickerEventHandlers();
         }
 
         private void PopulatePickers()
@@ -102,19 +74,13 @@ namespace AI_Translator_Mobile_App
             }
 
             NativeLanguagePicker.ItemsSource = languages;
+            TargetLanguage1Picker.ItemsSource = languages;
+            TargetLanguage2Picker.ItemsSource = languages;
+            TargetLanguage3Picker.ItemsSource = languages;
         }
 
         private void LoadSettings()
         {
-            var selectedLanguages = Preferences.Get("SelectedLanguages", "English,French,Turkish").Split(',').ToList();
-            foreach (var cb in languageCheckBoxes)
-            {
-                if (selectedLanguages.Contains(cb.Item2.Text))
-                {
-                    cb.Item1.IsChecked = true;
-                }
-            }
-
             TranslationModel1Picker.SelectedItem = ModelDisplayNames.DisplayNames.TryGetValue(Preferences.Get("TranslationModel1", "gpt-4o"), out var t1) ? t1 : Preferences.Get("TranslationModel1", "gpt-4o");
             TranslationModel2Picker.SelectedItem = ModelDisplayNames.DisplayNames.TryGetValue(Preferences.Get("TranslationModel2", "claude-4-sonnet"), out var t2) ? t2 : Preferences.Get("TranslationModel2", "claude-4-sonnet");
             TranslationModel3Picker.SelectedItem = ModelDisplayNames.DisplayNames.TryGetValue(Preferences.Get("TranslationModel3", "gemini-2.5-pro"), out var t3) ? t3 : Preferences.Get("TranslationModel3", "gemini-2.5-pro");
@@ -134,37 +100,99 @@ namespace AI_Translator_Mobile_App
             UsageModel5Picker.SelectedItem = ModelDisplayNames.DisplayNames.TryGetValue(Preferences.Get("UsageModel5", "sonar"), out var u5) ? u5 : Preferences.Get("UsageModel5", "sonar");
 
             NativeLanguagePicker.SelectedItem = Preferences.Get("NativeLanguage", "English");
+            TargetLanguage1Picker.SelectedItem = Preferences.Get("TargetLanguage1", "English");
+            TargetLanguage2Picker.SelectedItem = Preferences.Get("TargetLanguage2", "French");
+            TargetLanguage3Picker.SelectedItem = Preferences.Get("TargetLanguage3", "Turkish");
         }
 
-        private void OnSaveClicked(object sender, EventArgs e)
+        private void SetupPickerEventHandlers()
         {
-            var selectedLanguages = languageCheckBoxes.Where(cb => cb.Item1.IsChecked).Select(cb => cb.Item2.Text).ToList();
-            if (selectedLanguages.Count > 0)
+            NativeLanguagePicker.SelectedIndexChanged += OnPickerSelectedIndexChanged;
+            TargetLanguage1Picker.SelectedIndexChanged += OnPickerSelectedIndexChanged;
+            TargetLanguage2Picker.SelectedIndexChanged += OnPickerSelectedIndexChanged;
+            TargetLanguage3Picker.SelectedIndexChanged += OnPickerSelectedIndexChanged;
+
+            TranslationModel1Picker.SelectedIndexChanged += OnPickerSelectedIndexChanged;
+            TranslationModel2Picker.SelectedIndexChanged += OnPickerSelectedIndexChanged;
+            TranslationModel3Picker.SelectedIndexChanged += OnPickerSelectedIndexChanged;
+            TranslationModel4Picker.SelectedIndexChanged += OnPickerSelectedIndexChanged;
+            TranslationModel5Picker.SelectedIndexChanged += OnPickerSelectedIndexChanged;
+
+            GrammarModel1Picker.SelectedIndexChanged += OnPickerSelectedIndexChanged;
+            GrammarModel2Picker.SelectedIndexChanged += OnPickerSelectedIndexChanged;
+            GrammarModel3Picker.SelectedIndexChanged += OnPickerSelectedIndexChanged;
+            GrammarModel4Picker.SelectedIndexChanged += OnPickerSelectedIndexChanged;
+            GrammarModel5Picker.SelectedIndexChanged += OnPickerSelectedIndexChanged;
+
+            UsageModel1Picker.SelectedIndexChanged += OnPickerSelectedIndexChanged;
+            UsageModel2Picker.SelectedIndexChanged += OnPickerSelectedIndexChanged;
+            UsageModel3Picker.SelectedIndexChanged += OnPickerSelectedIndexChanged;
+            UsageModel4Picker.SelectedIndexChanged += OnPickerSelectedIndexChanged;
+            UsageModel5Picker.SelectedIndexChanged += OnPickerSelectedIndexChanged;
+        }
+
+        private void OnPickerSelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (sender is Picker picker)
             {
-                Preferences.Set("SelectedLanguages", string.Join(",", selectedLanguages));
+                string preferenceKey = picker.StyleId; // Use StyleId to store preference key
+
+                // Determine preference key based on picker name
+                if (picker == NativeLanguagePicker) preferenceKey = "NativeLanguage";
+                else if (picker == TargetLanguage1Picker) preferenceKey = "TargetLanguage1";
+                else if (picker == TargetLanguage2Picker) preferenceKey = "TargetLanguage2";
+                else if (picker == TargetLanguage3Picker) preferenceKey = "TargetLanguage3";
+
+                else if (picker == TranslationModel1Picker) preferenceKey = "TranslationModel1";
+                else if (picker == TranslationModel2Picker) preferenceKey = "TranslationModel2";
+                else if (picker == TranslationModel3Picker) preferenceKey = "TranslationModel3";
+                else if (picker == TranslationModel4Picker) preferenceKey = "TranslationModel4";
+                else if (picker == TranslationModel5Picker) preferenceKey = "TranslationModel5";
+
+                else if (picker == GrammarModel1Picker) preferenceKey = "GrammarModel1";
+                else if (picker == GrammarModel2Picker) preferenceKey = "GrammarModel2";
+                else if (picker == GrammarModel3Picker) preferenceKey = "GrammarModel3";
+                else if (picker == GrammarModel4Picker) preferenceKey = "GrammarModel4";
+                else if (picker == GrammarModel5Picker) preferenceKey = "GrammarModel5";
+
+                else if (picker == UsageModel1Picker) preferenceKey = "UsageModel1";
+                else if (picker == UsageModel2Picker) preferenceKey = "UsageModel2";
+                else if (picker == UsageModel3Picker) preferenceKey = "UsageModel3";
+                else if (picker == UsageModel4Picker) preferenceKey = "UsageModel4";
+                else if (picker == UsageModel5Picker) preferenceKey = "UsageModel5";
+
+
+                if (!string.IsNullOrEmpty(preferenceKey) && picker.SelectedItem != null)
+                {
+                    // For models, we need to convert display name back to key
+                    if (preferenceKey.Contains("Model"))
+                    {
+                        var originalKey = ModelDisplayNames.DisplayNames.FirstOrDefault(x => x.Value == (picker.SelectedItem as string)).Key;
+                        if (originalKey != null)
+                        {
+                            Preferences.Set(preferenceKey, originalKey);
+                        }
+                    }
+                    else // For languages, save directly
+                    {
+                        Preferences.Set(preferenceKey, picker.SelectedItem as string);
+                    }
+                }
             }
+        }
 
-            Preferences.Set("TranslationModel1", ModelDisplayNames.DisplayNames.FirstOrDefault(x => x.Value == (TranslationModel1Picker.SelectedItem as string)).Key);
-            Preferences.Set("TranslationModel2", ModelDisplayNames.DisplayNames.FirstOrDefault(x => x.Value == (TranslationModel2Picker.SelectedItem as string)).Key);
-            Preferences.Set("TranslationModel3", ModelDisplayNames.DisplayNames.FirstOrDefault(x => x.Value == (TranslationModel3Picker.SelectedItem as string)).Key);
-            Preferences.Set("TranslationModel4", ModelDisplayNames.DisplayNames.FirstOrDefault(x => x.Value == (TranslationModel4Picker.SelectedItem as string)).Key);
-            Preferences.Set("TranslationModel5", ModelDisplayNames.DisplayNames.FirstOrDefault(x => x.Value == (TranslationModel5Picker.SelectedItem as string)).Key);
+        public static List<string> GetSelectedTargetLanguages()
+        {
+            List<string> targetLanguages = new List<string>();
+            string lang1 = Preferences.Get("TargetLanguage1", "English");
+            string lang2 = Preferences.Get("TargetLanguage2", "French");
+            string lang3 = Preferences.Get("TargetLanguage3", "Turkish");
 
-            Preferences.Set("GrammarModel1", ModelDisplayNames.DisplayNames.FirstOrDefault(x => x.Value == (GrammarModel1Picker.SelectedItem as string)).Key);
-            Preferences.Set("GrammarModel2", ModelDisplayNames.DisplayNames.FirstOrDefault(x => x.Value == (GrammarModel2Picker.SelectedItem as string)).Key);
-            Preferences.Set("GrammarModel3", ModelDisplayNames.DisplayNames.FirstOrDefault(x => x.Value == (GrammarModel3Picker.SelectedItem as string)).Key);
-            Preferences.Set("GrammarModel4", ModelDisplayNames.DisplayNames.FirstOrDefault(x => x.Value == (GrammarModel4Picker.SelectedItem as string)).Key);
-            Preferences.Set("GrammarModel5", ModelDisplayNames.DisplayNames.FirstOrDefault(x => x.Value == (GrammarModel5Picker.SelectedItem as string)).Key);
+            if (!string.IsNullOrEmpty(lang1)) targetLanguages.Add(lang1);
+            if (!string.IsNullOrEmpty(lang2)) targetLanguages.Add(lang2);
+            if (!string.IsNullOrEmpty(lang3)) targetLanguages.Add(lang3);
 
-            Preferences.Set("UsageModel1", ModelDisplayNames.DisplayNames.FirstOrDefault(x => x.Value == (UsageModel1Picker.SelectedItem as string)).Key);
-            Preferences.Set("UsageModel2", ModelDisplayNames.DisplayNames.FirstOrDefault(x => x.Value == (UsageModel2Picker.SelectedItem as string)).Key);
-            Preferences.Set("UsageModel3", ModelDisplayNames.DisplayNames.FirstOrDefault(x => x.Value == (UsageModel3Picker.SelectedItem as string)).Key);
-            Preferences.Set("UsageModel4", ModelDisplayNames.DisplayNames.FirstOrDefault(x => x.Value == (UsageModel4Picker.SelectedItem as string)).Key);
-            Preferences.Set("UsageModel5", ModelDisplayNames.DisplayNames.FirstOrDefault(x => x.Value == (UsageModel5Picker.SelectedItem as string)).Key);
-
-            Preferences.Set("NativeLanguage", NativeLanguagePicker.SelectedItem as string);
-
-            DisplayAlert("Success", "Settings saved", "OK");
+            return targetLanguages;
         }
     }
 }

@@ -23,7 +23,8 @@ namespace AI_Translator_Mobile_App
         private string system_role_for_AI = "";
         private string[] AI_answers = new string[5];
         private PageMode currentMode = PageMode.Translation;
-        private string currentLanguage = "French";
+        private string currentLanguage = "English";
+        private List<string> _targetLanguages = new List<string>();
 
         private Dictionary<int, (string LLM, string Model, string Label)> grammarCheckModels = new Dictionary<int, (string LLM, string Model, string Label)>();
         private Dictionary<int, (string LLM, string Model, string Label)> translationAiModels = new Dictionary<int, (string LLM, string Model, string Label)>();
@@ -45,9 +46,13 @@ namespace AI_Translator_Mobile_App
 
         private void LoadSettings()
         {
-            var selectedLanguages = Preferences.Get("SelectedLanguages", "English,French,Turkish").Split(',');
-            currentLanguage = selectedLanguages[0];
-            CreateLanguageButtons(selectedLanguages);
+            _targetLanguages = SettingsPage.GetSelectedTargetLanguages();
+            if (_targetLanguages.Any())
+            {
+                currentLanguage = _targetLanguages[0];
+            }
+            CreateLanguageButtons(_targetLanguages);
+            UpdateLanguageButtonStyles();
 
             // Helper function to get provider and model
             (string LLM, string Model, string Label) GetModelInfo(string preferenceKey, string defaultModel)
@@ -89,13 +94,13 @@ namespace AI_Translator_Mobile_App
             };
         }
 
-        private void CreateLanguageButtons(string[] languages)
+        private void CreateLanguageButtons(List<string> languages)
         {
             var languageGrid = (Grid)LanguageSelector.Content;
             languageGrid.Children.Clear();
             languageGrid.ColumnDefinitions.Clear();
 
-            for (int i = 0; i < languages.Length; i++)
+            for (int i = 0; i < languages.Count; i++)
             {
                 languageGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Star });
                 var button = new Button
@@ -109,6 +114,10 @@ namespace AI_Translator_Mobile_App
             }
             UpdateLanguageButtonStyles();
         }
+
+        
+
+        
 
         private void OnLanguageButtonClicked(object sender, EventArgs e)
         {
@@ -127,11 +136,6 @@ namespace AI_Translator_Mobile_App
                     button.BackgroundColor = button.Text == currentLanguage ? (Color)Application.Current.Resources["AccentDark"] : (Color)Application.Current.Resources["FrameBackgroundColor"];
                 }
             }
-        }
-
-        private string GetSelectedLanguage()
-        {
-            return currentLanguage;
         }
 
         private string GetSelectedNativeLanguage()
@@ -235,18 +239,14 @@ namespace AI_Translator_Mobile_App
 
             try
             {
-                switch (currentMode)
+                if (currentMode == PageMode.GrammarCheck)
                 {
-                    case PageMode.Translation:
-                        system_role_for_AI = $"Translate the given message to {GetSelectedLanguage()}. Do not add any other comments. Only translate. If there is more than one translation, include them all.";
-                        break;
-                    case PageMode.GrammarCheck:
-                        system_role_for_AI = $"You'll be given a sentence or a phrase. Your ONLY task is to check if the grammar of the given message is correct or not. If it's not correct, explain why. " +
-                        $"Given sentence/phrase might be a question, don't get confused and don't try to answer the question. ONLY check the grammar of the sentence. Generate your response only in {GetSelectedNativeLanguage()}, because the user speaks only {GetSelectedNativeLanguage()}.";
-                        break;
-                    case PageMode.UsageAnalysis:
-                        system_role_for_AI = $"Analyze the given phrase/word for its usage context. Be very brief (1-2 sentences): formality level, frequency of use, and typical situations. Keep it short and practical. Generate your response only in {GetSelectedNativeLanguage()}, because the user speaks only {GetSelectedNativeLanguage()}.";
-                        break;
+                    system_role_for_AI = $"You'll be given a sentence or a phrase. Your ONLY task is to check if the grammar of the given message is correct or not. If it's not correct, explain why. " +
+                    $"Given sentence/phrase might be a question, don't get confused and don't try to answer the question. ONLY check the grammar of the sentence. Generate your response only in {GetSelectedNativeLanguage()}, because the user speaks only {GetSelectedNativeLanguage()}.";
+                }
+                else if (currentMode == PageMode.UsageAnalysis)
+                {
+                    system_role_for_AI = $"Analyze the given phrase/word for its usage context. Be very brief (1-2 sentences): formality level, frequency of use, and typical situations. Keep it short and practical. Generate your response only in {GetSelectedNativeLanguage()}, because the user speaks only {GetSelectedNativeLanguage()}.";
                 }
 
                 var tasks = new List<Task>();
@@ -254,7 +254,14 @@ namespace AI_Translator_Mobile_App
                 switch (currentMode)
                 {
                     case PageMode.Translation:
-                        await ProcessTranslations(InputEntry.Text, system_role_for_AI, tasks);
+                        if (!string.IsNullOrEmpty(currentLanguage))
+                        {
+                            await ProcessTranslations(InputEntry.Text, currentLanguage, tasks);
+                        }
+                        else
+                        {
+                            await DisplayAlert("Error", "No target language selected.", "OK");
+                        }
                         break;
                     case PageMode.GrammarCheck:
                         await ProcessGrammarCheck(InputEntry.Text, system_role_for_AI, tasks);
@@ -279,8 +286,9 @@ namespace AI_Translator_Mobile_App
 
         
 
-        private async Task ProcessTranslations(string inputText, string systemRole, List<Task> tasks)
+        private async Task ProcessTranslations(string inputText, string targetLanguage, List<Task> tasks)
         {
+            string system_role_for_AI = $"Translate the given message to {targetLanguage}. Do not add any other comments. Only translate. If there is more than one translation, include them all.";
             for (int i = 0; i < 5; i++)
             {
                 var (llm, model, Label) = translationAiModels[i + 1];
@@ -296,13 +304,13 @@ namespace AI_Translator_Mobile_App
 
                 if (llm == "TranslationService")
                 {
-                    tasks.Add(CreateTranslationTask(model, GetSelectedLanguage(), inputText, modelIndex, outputEditor, loadingIndicator));
+                    tasks.Add(CreateTranslationTask(model, targetLanguage, inputText, modelIndex, outputEditor, loadingIndicator));
                 }
                 else
                 {
                     tasks.Add(Task.Run(async () =>
                     {
-                        var result = await All_AI_Chat_Bots.AskAI(llm, model, systemRole, inputText);
+                        var result = await All_AI_Chat_Bots.AskAI(llm, model, system_role_for_AI, inputText);
                         AI_answers[modelIndex] = result.text;
 
                         MainThread.BeginInvokeOnMainThread(() =>

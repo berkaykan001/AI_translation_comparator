@@ -7,8 +7,12 @@
 
             <Frame>
                 <StackLayout>
-                    <Label Text="Languages" FontSize="20" FontAttributes="Bold" />
-                    <FlexLayout x:Name="LanguageFlexLayout" Wrap="Wrap" />
+                    <Label Text="Target Language 1" FontSize="20" FontAttributes="Bold" />
+                    <Picker x:Name="TargetLanguage1Picker" SelectedIndexChanged="OnPickerSelectedIndexChanged" />
+                    <Label Text="Target Language 2" FontSize="20" FontAttributes="Bold" />
+                    <Picker x:Name="TargetLanguage2Picker" SelectedIndexChanged="OnPickerSelectedIndexChanged" />
+                    <Label Text="Target Language 3" FontSize="20" FontAttributes="Bold" />
+                    <Picker x:Name="TargetLanguage3Picker" SelectedIndexChanged="OnPickerSelectedIndexChanged" />
                 </StackLayout>
             </Frame>
 
@@ -67,7 +71,7 @@
                 </StackLayout>
             </Frame>
 
-            <Button Text="Save" Clicked="OnSaveClicked" />
+            
         </StackLayout>
     </ScrollView>
 </ContentPage>
