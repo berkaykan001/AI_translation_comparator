@@ -476,6 +476,15 @@ namespace AI_Translator_Mobile_App
             }
         }
 
+        private async void OnOutputTapped(object sender, EventArgs e)
+        {
+            if (sender is Editor editor && !string.IsNullOrEmpty(editor.Text))
+            {
+                await Clipboard.SetTextAsync(editor.Text);
+                await DisplayAlert("Copied", "The text has been copied to the clipboard.", "OK");
+            }
+        }
+
         private async void OnSettingsClicked(object sender, EventArgs e)
         {
             await Navigation.PushAsync(new SettingsPage());
