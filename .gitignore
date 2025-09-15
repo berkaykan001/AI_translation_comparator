@@ -237,3 +237,8 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
+
+# Secret files
+secrets.json
+application_default_credentials.json
+AIBrainstorm.keystore
