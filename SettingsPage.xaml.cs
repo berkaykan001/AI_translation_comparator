@@ -15,7 +15,7 @@ namespace AI_Translator_Mobile_App
         private readonly List<string> models = new List<string>
         {
             "gpt-5", "gpt-5-mini", "gpt-4o", "gpt-4o-mini", "gpt-4.1",
-            "claude-sonnet-4-20250514", "claude-3-5-haiku-20241022", "claude-opus-4-1-20250805",
+            "claude-sonnet-4-20250514", "claude-3-5-haiku-20241022",
             "grok-4",
             "sonar",
             "meta-llama/llama-4-maverick", "meta-llama/llama-4-scout",
@@ -26,7 +26,7 @@ namespace AI_Translator_Mobile_App
         private readonly List<string> grammarAndUsageModels = new List<string>
         {
             "gpt-5", "gpt-5-mini", "gpt-4o", "gpt-4o-mini", "gpt-4.1",
-            "claude-sonnet-4-20250514", "claude-3-5-haiku-20241022", "claude-opus-4-1-20250805",
+            "claude-sonnet-4-20250514", "claude-3-5-haiku-20241022",
             "grok-4",
             "sonar",
             "meta-llama/llama-4-maverick", "meta-llama/llama-4-scout",
