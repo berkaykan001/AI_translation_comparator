@@ -93,51 +93,31 @@ public static class LLMConfiguration
     public static Dictionary<string, string> ModelProviders = new()
     {
         // OpenAI
-        { "gpt-5", "OpenAI" },
-        { "gpt-5-mini", "OpenAI" },
-        { "gpt-5-nano", "OpenAI" },
-        { "gpt-4o", "OpenAI" },
-        { "gpt-4o-mini", "OpenAI" },
-        { "gpt-4.1", "OpenAI" },
-        { "gpt-4", "OpenAI" },
-        { "gpt-3.5", "OpenAI" },
-        { "dall-e-3", "OpenAI" },
-        { "dall-e-2", "OpenAI" },
+        { "gpt-5-2025-08-07", "OpenAI" },
+        { "gpt-5-mini-2025-08-07", "OpenAI" },
+        { "gpt-5-nano-2025-08-07", "OpenAI" },
+        { "gpt-4.1-2025-04-14", "OpenAI" },
 
-        // Claude
-        { "claude-sonnet-4-20250514", "Claude" },
+        // Google
+        { "models/gemini-2.5-pro", "Gemini" },
+        { "models/gemini-2.5-flash", "Gemini" },
+        { "models/gemini-2.5-flash-lite", "Gemini" },
+
+        // OpenRouter
+        { "meta-llama/llama-4-scout", "OpenRouter" },
+        { "meta-llama/llama-4-maverick", "OpenRouter" },
+
+        // Anthropic
+        { "claude-sonnet-4-5-20250929", "Claude" },
         { "claude-3-5-haiku-20241022", "Claude" },
-        { "claude-opus-4-1-20250805", "Claude" },
-
-        // MistralAI
-        { "mistral-large-2", "Mistral" },
-        { "codestral", "Mistral" },
-        { "mistral-7b", "Mistral" },
-
-        // Grok
-        { "grok-4", "Grok" },
-        { "grok-3-beta", "Grok" },
-        { "grok-3-fast-beta", "Grok" },
 
         // Perplexity
         { "sonar", "Perplexity" },
-        { "sonar-pro", "Perplexity" },
-        { "sonar-reasoning", "Perplexity" },
 
-        // Meta (via OpenRouter)
-        { "meta-llama/llama-4-maverick", "OpenRouter" },
-        { "meta-llama/llama-4-scout", "OpenRouter" },
-
-        // Gemini
-        { "gemini-2.5-pro", "Gemini" },
-        { "gemini-2.5-flash", "Gemini" },
-        { "gemini-1.5-pro", "Gemini" },
-        { "gemini-1.5-flash", "Gemini" },
-
-        // Cohere (via OpenRouter)
-        { "command-r-plus-08-2024", "OpenRouter" },
-        { "command-r-plus-04-2024", "OpenRouter" },
-        { "command-r-03-2024", "OpenRouter" },
+        // Grok
+        { "grok-4-fast-reasoning", "Grok" },
+        { "grok-4-fast-non-reasoning", "Grok" },
+        { "grok-4-0709", "Grok" },
 
         // Translation Services
         { "DeepL", "TranslationService" },
@@ -146,61 +126,41 @@ public static class LLMConfiguration
 
     // Cost per 1M tokens for each model (input/output)
     public static Dictionary<string, (decimal InputCost, decimal OutputCost)> ModelCosts = new()
-{
-    // OpenAI
-    { "gpt-5", (1.25m, 10m) },
-    { "gpt-5-mini", (0.25m, 2m) },
-    { "gpt-5-nano", (0.05m, 0.40m) },
-    { "gpt-4o", (2.5m, 10m) },
-    { "gpt-4o-mini", (0.15m, 0.6m) },
-    { "gpt-4.1", (3m, 12m) },
-    { "gpt-4", (27.90m, 55.80m) },
-    { "gpt-3.5", (0.47m, 1.40m) },
-    { "dall-e-3", (0m, 0.04m) }, // Cost per image
-    { "dall-e-2", (0m, 0.02m) }, // Cost per image
-    
-    // Claude
-    { "claude-sonnet-4-20250514", (3m, 15m) },
-    { "claude-3-5-haiku-20241022", (0.25m, 1.25m) },
-    { "claude-opus-4-1-20250805", (15m, 75m) },
-    
-    // MistralAI
-    { "mistral-large-2", (3m, 9m) },
-    { "codestral", (1m, 3m) },
-    { "mistral-7b", (0.25m, 0.25m) },
-    
-    // Grok
-    { "grok-4", (3m, 15m) },
-    { "grok-3-beta", (3m, 15m) },
-    { "grok-3-fast-beta", (5m, 25m) },
+    {
+        // OpenAI
+        { "gpt-5-2025-08-07", (1.25m, 10.00m) },
+        { "gpt-5-mini-2025-08-07", (0.25m, 2.00m) },
+        { "gpt-5-nano-2025-08-07", (0.05m, 0.40m) },
+        { "gpt-4.1-2025-04-14", (2.00m, 8.00m) },
 
-    // Perplexity
-    { "sonar", (15m, 15m) }, // These prices are incorrect, the calculation is complex, BaseChatService.CalculatePerplexityCost method calculates it.
-    { "sonar-pro", (15m, 15m) },
-    { "sonar-reasoning", (15m, 15m) }, // Using same pricing as sonar 
-    
-    // Meta
-    { "meta-llama/llama-4-maverick", (0.16m, 0.6m) },
-    { "meta-llama/llama-4-scout", (0.08m, 0.3m) },
+        // Google
+        { "models/gemini-2.5-pro", (1.25m, 10.00m) },
+        { "models/gemini-2.5-flash", (0.30m, 2.50m) },
+        { "models/gemini-2.5-flash-lite", (0.10m, 0.40m) },
 
-    // Gemini
-    { "gemini-2.5-pro", (1.25m, 10m) },
-    { "gemini-2.5-flash", (0.50m, 2.00m) },
-    { "gemini-1.5-pro", (3.5m, 7m) },
-    { "gemini-1.5-flash", (0.35m, 0.7m) },
-    
-    // Cohere
-    { "command-r-plus-08-2024", (2.5m, 10m) },
-    { "command-r-plus-04-2024", (3m, 15m) },
-    { "command-r-03-2024", (0.5m, 1.5m) },
+        // OpenRouter
+        { "meta-llama/llama-4-scout", (0.08m, 0.30m) },
+        { "meta-llama/llama-4-maverick", (0.15m, 0.60m) },
 
-    // Translation Services
-    { "DeepL", (0m, 0m) },
-    { "Google Translate", (0m, 0m) },
+        // Anthropic
+        { "claude-sonnet-4-5-20250929", (3.00m, 6.00m) },
+        { "claude-3-5-haiku-20241022", (0.80m, 4.00m) },
 
-    // Default for unknown models
-    { "default", (1m, 3m) }
-};
+        // Perplexity
+        { "sonar", (1.00m, 1.00m) },
+
+        // Grok
+        { "grok-4-fast-reasoning", (0.20m, 0.50m) },
+        { "grok-4-fast-non-reasoning", (0.20m, 0.50m) },
+        { "grok-4-0709", (3.00m, 15.00m) },
+
+        // Translation Services
+        { "DeepL", (0m, 0m) },
+        { "Google Translate", (0m, 0m) },
+
+        // Default for unknown models
+        { "default", (1m, 3m) }
+    };
 
     // Approximate tokens per word (for estimation)
     public const double TokensPerWord = 1.3;

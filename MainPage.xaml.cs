@@ -70,27 +70,27 @@ namespace AI_Translator_Mobile_App
             {
                 { 1, GetModelInfo("TranslationModel1", "DeepL") },
                 { 2, GetModelInfo("TranslationModel2", "Google Translate") },
-                { 3, GetModelInfo("TranslationModel3", "claude-3-haiku") },
-                { 4, GetModelInfo("TranslationModel4", "gpt-4o") },
+                { 3, GetModelInfo("TranslationModel3", "claude-3-5-haiku-20241022") },
+                { 4, GetModelInfo("TranslationModel4", "gpt-5-2025-08-07") },
                 { 5, GetModelInfo("TranslationModel5", "meta-llama/llama-4-maverick") }
             };
 
             grammarCheckModels = new Dictionary<int, (string LLM, string Model, string Label)>
             {
-                { 1, GetModelInfo("GrammarModel1", "gpt-4o-mini") },
-                { 2, GetModelInfo("GrammarModel2", "claude-3-haiku") },
-                { 3, GetModelInfo("GrammarModel3", "gemini-1.5-flash") },
-                { 4, GetModelInfo("GrammarModel4", "grok-4") },
-                { 5, GetModelInfo("GrammarModel5", "sonar") }
+                { 1, GetModelInfo("GrammarModel1", "gpt-5-mini-2025-08-07") },
+                { 2, GetModelInfo("GrammarModel2", "claude-3-5-haiku-20241022") },
+                { 3, GetModelInfo("GrammarModel3", "models/gemini-2.5-flash") },
+                { 4, GetModelInfo("GrammarModel4", "sonar") },
+                { 5, GetModelInfo("GrammarModel5", "gpt-5-nano-2025-08-07") }
             };
 
             usageAnalysisModels = new Dictionary<int, (string LLM, string Model, string Label)>
             {
-                { 1, GetModelInfo("UsageModel1", "gpt-4o-mini") },
-                { 2, GetModelInfo("UsageModel2", "claude-3-haiku") },
-                { 3, GetModelInfo("UsageModel3", "gemini-1.5-flash") },
-                { 4, GetModelInfo("UsageModel4", "grok-4") },
-                { 5, GetModelInfo("UsageModel5", "sonar") }
+                { 1, GetModelInfo("UsageModel1", "gpt-5-mini-2025-08-07") },
+                { 2, GetModelInfo("UsageModel2", "claude-3-5-haiku-20241022") },
+                { 3, GetModelInfo("UsageModel3", "models/gemini-2.5-flash") },
+                { 4, GetModelInfo("UsageModel4", "sonar") },
+                { 5, GetModelInfo("UsageModel5", "gpt-5-nano-2025-08-07") }
             };
         }
 

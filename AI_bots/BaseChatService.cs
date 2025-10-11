@@ -144,77 +144,7 @@
         return inputCost + outputCost;
     }
 
-    // Calculate Perplexity cost for a single execution
-    protected static decimal CalculatePerplexityCost(string modelId, int inputTokens, int outputTokens, int searchQueries = 1)
-    {
-        decimal inputCostPerMillion = 0;
-        decimal outputCostPerMillion = 0;
-        decimal costPer1000Requests = 0;
-        decimal inferenceCostPerMillion = 0;
-
-        // Set pricing based on model
-        switch (modelId)
-        {
-            case "sonar":
-                inputCostPerMillion = 1m;
-                outputCostPerMillion = 1m;
-                costPer1000Requests = 5m; // Using the low tier pricing
-                break;
-            case "sonar-pro":
-                inputCostPerMillion = 3m;
-                outputCostPerMillion = 15m;
-                costPer1000Requests = 6m; // Using the low tier pricing
-                break;
-            case "sonar-reasoning":
-                inputCostPerMillion = 1m;
-                outputCostPerMillion = 5m;
-                costPer1000Requests = 5m; // Using the low tier pricing
-                break;
-            case "sonar-reasoning-pro":
-                inputCostPerMillion = 2m;
-                outputCostPerMillion = 8m;
-                costPer1000Requests = 6m; // Using the low tier pricing
-                break;
-            case "sonar-deep-research":
-                inputCostPerMillion = 2m;
-                outputCostPerMillion = 8m;
-                inferenceCostPerMillion = 3m;
-                costPer1000Requests = 5m;
-                break;
-            case "r1-1776": // Offline model
-                inputCostPerMillion = 2m;
-                outputCostPerMillion = 8m;
-                costPer1000Requests = 0m; // No search queries for offline model
-                break;
-            default:
-                // Default to sonar pricing if model not recognized
-                inputCostPerMillion = 1m;
-                outputCostPerMillion = 1m;
-                costPer1000Requests = 5m;
-                break;
-        }
-
-        // Calculate costs
-        decimal inputCost = (inputTokens / 1000000m) * inputCostPerMillion;
-        decimal outputCost = (outputTokens / 1000000m) * outputCostPerMillion;
-
-        // Calculate inference cost (only for deep research model)
-        decimal inferenceCost = 0;
-        if (modelId == "sonar-deep-research")
-        {
-            // Assuming inference tokens are roughly half of input tokens for estimation
-            int inferenceTokens = inputTokens / 2;
-            inferenceCost = (inferenceTokens / 1000000m) * inferenceCostPerMillion;
-        }
-
-        // Calculate request cost (per execution)
-        decimal requestCost = (searchQueries / 1000m) * costPer1000Requests;
-
-        // Total cost
-        decimal totalCost = inputCost + outputCost + inferenceCost + requestCost;
-
-        return totalCost;
-    }
+    
 
     // Calculate OpenAI web search cost for a single execution
     protected static decimal CalculateOpenAIWebSearchCost(string AImodel, int searchContextSize = 2, int estimatedInternalSearches = 1)

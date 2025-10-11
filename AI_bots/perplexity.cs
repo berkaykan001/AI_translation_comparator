@@ -74,7 +74,7 @@ public class PerplexityChat : BaseChatService
         int outputTokens = EstimateTokenCount(responseText);
 
         // Calculate estimated cost
-        decimal estimatedCost = CalculatePerplexityCost(AImodel, inputTokens, outputTokens);
+        decimal estimatedCost = CalculateCost(AImodel, inputTokens, outputTokens);
 
         // Add the user message and assistant response to the conversation history
         _conversationHistories[AImodel].Add(userMsg);

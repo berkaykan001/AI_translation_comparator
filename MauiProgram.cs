@@ -17,6 +17,7 @@ namespace AI_Translator_Mobile_App
 
 #if DEBUG
     		builder.Logging.AddDebug();
+            builder.Logging.SetMinimumLevel(LogLevel.Debug);
 #endif
 
             return builder.Build();

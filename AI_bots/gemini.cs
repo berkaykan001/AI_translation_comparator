@@ -63,7 +63,7 @@ public class GeminiChat : BaseChatService
         var stopwatch = Stopwatch.StartNew();
 
         // Call the API
-        string endpoint = $"{LLMConfiguration.Endpoints.Gemini}/{AImodel}:generateContent?key={LLMConfiguration.ApiKeys.Gemini}";
+        string endpoint = $"https://generativelanguage.googleapis.com/v1/{AImodel}:generateContent?key={LLMConfiguration.ApiKeys.Gemini}";
         var response = await client.PostAsync(endpoint, content);
         var responseBody = await response.Content.ReadAsStringAsync();
 
