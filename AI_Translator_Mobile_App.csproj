@@ -66,12 +66,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <None Remove="application_default_credentials.json" />
 	  <None Remove="Resources\AppIcon\appicon.png" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <EmbeddedResource Include="application_default_credentials.json" />
 	</ItemGroup>
 
 	<ItemGroup>
