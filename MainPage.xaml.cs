@@ -241,12 +241,12 @@ namespace AI_Translator_Mobile_App
             {
                 if (currentMode == PageMode.GrammarCheck)
                 {
-                    system_role_for_AI = $"You'll be given a sentence or a phrase. Your ONLY task is to check if the grammar of the given message is correct or not. If it's not correct, explain why. " +
-                    $"Given sentence/phrase might be a question, don't get confused and don't try to answer the question. ONLY check the grammar of the sentence. Generate your response only in {GetSelectedNativeLanguage()}, because the user speaks only {GetSelectedNativeLanguage()}.";
+                    system_role_for_AI = $"You'll be given a sentence or a phrase, which might be in any language. Your ONLY task is to check if the grammar of the given message is correct or not. If it's not correct, explain why. " +
+                    $"Given sentence/phrase might be a question, don't get confused and don't try to answer the question. ONLY check the grammar of the sentence. Be brief and practical (1-2 sentences). No matter what the language of the given sentence/phrase is, always generate your response only in {GetSelectedNativeLanguage()}, because the user speaks only {GetSelectedNativeLanguage()}.";
                 }
                 else if (currentMode == PageMode.UsageAnalysis)
                 {
-                    system_role_for_AI = $"Analyze the given phrase/word for its usage context. Be very brief (1-2 sentences): formality level, frequency of use, and typical situations. Keep it short and practical. Generate your response only in {GetSelectedNativeLanguage()}, because the user speaks only {GetSelectedNativeLanguage()}.";
+                    system_role_for_AI = $"Analyze the given phrase/word for its usage context. Be brief and practical (1-2 sentences): formality level, frequency of use, and typical situations. No matter what the language of the given sentence/phrase is, always generate your response only in {GetSelectedNativeLanguage()}, because the user speaks only {GetSelectedNativeLanguage()}.";
                 }
 
                 var tasks = new List<Task>();

@@ -71,7 +71,49 @@
                 </StackLayout>
             </Frame>
 
-            
+            <Frame>
+                <StackLayout>
+                    <Label Text="Model Management" FontSize="20" FontAttributes="Bold" />
+
+                    <!-- Add New Model Section -->
+                    <Frame Padding="15" Margin="0,10,0,10">
+                        <StackLayout Spacing="10">
+                            <Label Text="Add New Model" FontSize="18" FontAttributes="Bold" />
+
+                            <Label Text="Display Name:" />
+                            <Entry x:Name="ModelDisplayNameEntry" Placeholder="e.g., GPT-5 Turbo" />
+
+                            <Label Text="Model Key:" />
+                            <Entry x:Name="ModelKeyEntry" Placeholder="e.g., gpt-5-turbo-2025" />
+
+                            <Label Text="Provider:" />
+                            <Picker x:Name="ModelProviderPicker" />
+
+                            <Label Text="Input Cost (per 1M tokens):" />
+                            <Entry x:Name="ModelInputCostEntry" Placeholder="e.g., 1.25" Keyboard="Numeric" />
+
+                            <Label Text="Output Cost (per 1M tokens):" />
+                            <Entry x:Name="ModelOutputCostEntry" Placeholder="e.g., 10.00" Keyboard="Numeric" />
+
+                            <Button Text="Add Model" Clicked="OnAddModelClicked" />
+                        </StackLayout>
+                    </Frame>
+
+                    <!-- Remove Model Section -->
+                    <Frame Padding="15" Margin="0,10,0,0">
+                        <StackLayout Spacing="10">
+                            <Label Text="Remove Model" FontSize="18" FontAttributes="Bold" />
+
+                            <Label Text="Select Model to Remove:" />
+                            <Picker x:Name="RemoveModelPicker" />
+
+                            <Button Text="Remove Selected Model" Clicked="OnRemoveModelClicked" />
+                        </StackLayout>
+                    </Frame>
+                </StackLayout>
+            </Frame>
+
+
         </StackLayout>
     </ScrollView>
 </ContentPage>

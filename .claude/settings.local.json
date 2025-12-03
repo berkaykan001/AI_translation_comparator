@@ -5,7 +5,8 @@
       "Bash(dir:*)",
       "Bash(dotnet build:*)",
       "Bash(test:*)",
-      "Bash(find:*)"
+      "Bash(find:*)",
+      "Bash(git config:*)"
     ],
     "deny": [],
     "ask": []

@@ -1,5 +1,8 @@
 using AI_Translator_Mobile_App.AI_bots;
+using AI_Translator_Mobile_App.Models;
+using AI_Translator_Mobile_App.Services;
 using Microsoft.Maui.Controls;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -12,17 +15,25 @@ namespace AI_Translator_Mobile_App
             "English", "French", "Turkish", "Italian", "German", "Spanish", "Dutch", "Russian", "Japanese", "Cantonese", "Mandarin", "Polish", "Portugal Portuguese", "Brazilian Portuguese", "Korean", "Ukrainian"
         };
 
-        private readonly List<string> models = ModelDisplayNames.DisplayNames.Keys.ToList();
+        private List<string> models = ModelDisplayNames.DisplayNames.Keys.ToList();
 
-        private readonly List<string> grammarAndUsageModels = ModelDisplayNames.DisplayNames.Keys
+        private List<string> grammarAndUsageModels = ModelDisplayNames.DisplayNames.Keys
             .Where(k => k != "DeepL" && k != "Google Translate").ToList();
 
         public SettingsPage()
         {
             InitializeComponent();
+            PopulateProviderPicker();
             PopulatePickers();
             LoadSettings();
             SetupPickerEventHandlers();
+            LoadAllModelsForRemoval();
+        }
+
+        private void PopulateProviderPicker()
+        {
+            ModelProviderPicker.ItemsSource = ProviderEndpoints.GetProviders();
+            ModelProviderPicker.SelectedIndex = 0; // Default to first provider
         }
 
         private void PopulatePickers()
@@ -177,6 +188,147 @@ namespace AI_Translator_Mobile_App
             if (!string.IsNullOrEmpty(lang3)) targetLanguages.Add(lang3);
 
             return targetLanguages;
+        }
+
+        private void LoadAllModelsForRemoval()
+        {
+            var allModels = CustomModelStorage.LoadCustomModels();
+            RemoveModelPicker.ItemsSource = allModels.Select(m => m.GetFormattedDisplayName()).ToList();
+        }
+
+        private async void OnAddModelClicked(object sender, EventArgs e)
+        {
+            try
+            {
+                // Validate inputs
+                if (string.IsNullOrWhiteSpace(ModelDisplayNameEntry.Text))
+                {
+                    await DisplayAlert("Error", "Please enter a display name", "OK");
+                    return;
+                }
+
+                if (string.IsNullOrWhiteSpace(ModelKeyEntry.Text))
+                {
+                    await DisplayAlert("Error", "Please enter a model key", "OK");
+                    return;
+                }
+
+                if (ModelProviderPicker.SelectedIndex < 0)
+                {
+                    await DisplayAlert("Error", "Please select a provider", "OK");
+                    return;
+                }
+
+                if (!double.TryParse(ModelInputCostEntry.Text, out double inputCost))
+                {
+                    await DisplayAlert("Error", "Please enter a valid input cost", "OK");
+                    return;
+                }
+
+                if (!double.TryParse(ModelOutputCostEntry.Text, out double outputCost))
+                {
+                    await DisplayAlert("Error", "Please enter a valid output cost", "OK");
+                    return;
+                }
+
+                // Get provider and endpoint
+                string provider = ModelProviderPicker.SelectedItem as string;
+                string endpoint = ProviderEndpoints.GetEndpoint(provider);
+
+                // Create custom model
+                var customModel = new CustomModel
+                {
+                    DisplayName = ModelDisplayNameEntry.Text.Trim(),
+                    ModelKey = ModelKeyEntry.Text.Trim(),
+                    Endpoint = endpoint,
+                    Provider = provider,
+                    InputCostPer1M = inputCost,
+                    OutputCostPer1M = outputCost
+                };
+
+                // Check if model key already exists
+                var existingModels = CustomModelStorage.LoadCustomModels();
+                if (existingModels.Any(m => m.ModelKey == customModel.ModelKey))
+                {
+                    await DisplayAlert("Error", "A model with this key already exists", "OK");
+                    return;
+                }
+
+                // Save model
+                CustomModelStorage.AddCustomModel(customModel);
+
+                // Refresh display names and pickers
+                ModelDisplayNames.RefreshDisplayNames();
+                RefreshPickers();
+
+                // Clear input fields
+                ModelDisplayNameEntry.Text = string.Empty;
+                ModelKeyEntry.Text = string.Empty;
+                ModelInputCostEntry.Text = string.Empty;
+                ModelOutputCostEntry.Text = string.Empty;
+                ModelProviderPicker.SelectedIndex = 0;
+
+                // Reload removal picker
+                LoadAllModelsForRemoval();
+
+                await DisplayAlert("Success", "Model added successfully!", "OK");
+            }
+            catch (Exception ex)
+            {
+                await DisplayAlert("Error", $"Failed to add model: {ex.Message}", "OK");
+            }
+        }
+
+        private async void OnRemoveModelClicked(object sender, EventArgs e)
+        {
+            try
+            {
+                if (RemoveModelPicker.SelectedIndex < 0)
+                {
+                    await DisplayAlert("Error", "Please select a model to remove", "OK");
+                    return;
+                }
+
+                var allModels = CustomModelStorage.LoadCustomModels();
+                var selectedModel = allModels[RemoveModelPicker.SelectedIndex];
+
+                bool confirm = await DisplayAlert("Confirm",
+                    $"Are you sure you want to remove '{selectedModel.DisplayName}'?",
+                    "Yes", "No");
+
+                if (!confirm)
+                    return;
+
+                // Remove model
+                CustomModelStorage.RemoveCustomModel(selectedModel.Id);
+
+                // Refresh display names and pickers
+                ModelDisplayNames.RefreshDisplayNames();
+                RefreshPickers();
+
+                // Reload removal picker
+                LoadAllModelsForRemoval();
+
+                await DisplayAlert("Success", "Model removed successfully!", "OK");
+            }
+            catch (Exception ex)
+            {
+                await DisplayAlert("Error", $"Failed to remove model: {ex.Message}", "OK");
+            }
+        }
+
+        private void RefreshPickers()
+        {
+            // Reload model lists
+            models = ModelDisplayNames.DisplayNames.Keys.ToList();
+            grammarAndUsageModels = ModelDisplayNames.DisplayNames.Keys
+                .Where(k => k != "DeepL" && k != "Google Translate").ToList();
+
+            // Repopulate pickers
+            PopulatePickers();
+
+            // Reload settings to restore selected values
+            LoadSettings();
         }
     }
 }
